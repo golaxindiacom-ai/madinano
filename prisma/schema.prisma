@@ -1,0 +1,525 @@
+// Navbharat LMS — PostgreSQL schema (Prisma ORM)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String    @id
+  name         String
+  email        String    @unique
+  role         String
+  status       String
+  phone        String?
+  country      String?
+  city         String?
+  notes        String?
+  instructorId String?
+  avatarUrl    String?
+  lastLoginAt  DateTime?
+  passwordHash String?
+  createdAt    DateTime
+  updatedAt    DateTime
+
+  @@map("users")
+}
+
+model Instructor {
+  id         String   @id
+  name       String
+  email      String   @unique
+  expertise  String
+  bio        String?
+  phone      String?
+  country    String?
+  city       String?
+  courses    Int      @default(0)
+  students   Int      @default(0)
+  rating     Float    @default(0)
+  status     String
+  userId     String?
+  slug       String?
+  avatarUrl  String?
+  title      String?
+  createdAt  DateTime
+  updatedAt  DateTime
+
+  @@map("instructors")
+}
+
+model Enrollment {
+  id          String   @id
+  userId      String
+  courseId    String
+  courseTitle String
+  progress    Float    @default(0)
+  status      String
+  enrolledAt  DateTime
+  createdAt   DateTime
+  updatedAt   DateTime
+
+  @@index([userId])
+  @@index([courseId])
+  @@map("enrollments")
+}
+
+model Category {
+  id          String   @id
+  name        String
+  slug        String   @unique
+  parentId    String?
+  level       Int
+  description String?
+  order       Int      @default(0)
+  courseCount Int      @default(0)
+  status      String
+  createdAt   DateTime
+  updatedAt   DateTime
+
+  @@index([parentId])
+  @@map("categories")
+}
+
+model Course {
+  id                String   @id
+  title             String
+  shortDescription  String?
+  description       String
+  mainCategoryId    String
+  subCategoryId     String?
+  subSubCategoryId  String?
+  categoryId        String
+  instructorId      String
+  originalPrice     Float
+  sellingPrice      Float
+  price             Float?
+  enrollments       Int      @default(0)
+  rating            Float    @default(0)
+  status            String
+  level             String
+  mode              String
+  duration          String
+  language          String?
+  requirements      Json?
+  outcomes          Json?
+  thumbnailUrl      String?
+  curriculum        Json     @default("[]")
+  finalExamQuizId   String?
+  createdAt         DateTime
+  updatedAt         DateTime
+
+  @@index([instructorId])
+  @@index([categoryId])
+  @@map("courses")
+}
+
+model Lesson {
+  id             String   @id
+  title          String
+  courseId       String
+  sectionId      String
+  description    String?
+  duration       String
+  order          Int      @default(0)
+  status         String
+  lessonType     String
+  content        String?
+  videoProvider  String?
+  videoUrl       String?
+  videoId        String?
+  isPrivateVideo Boolean?
+  quizId         String?
+  createdAt      DateTime
+  updatedAt      DateTime
+
+  @@index([courseId])
+  @@map("lessons")
+}
+
+model Assignment {
+  id                  String   @id
+  title               String
+  courseId            String
+  sectionId           String?
+  lessonId            String?
+  description         String?
+  instructions        String?
+  dueDate             DateTime
+  maxMarks            Float?
+  allowLateSubmission Boolean?
+  submissions         Int      @default(0)
+  status              String
+  createdAt           DateTime
+  updatedAt           DateTime
+
+  @@index([courseId])
+  @@map("assignments")
+}
+
+model AssignmentSubmission {
+  id           String   @id
+  assignmentId String
+  userId       String
+  content      String?
+  fileUrl      String?
+  status       String
+  marks        Float?
+  feedback     String?
+  submittedAt  DateTime
+  createdAt    DateTime
+  updatedAt    DateTime
+
+  @@index([assignmentId])
+  @@index([userId])
+  @@map("assignment_submissions")
+}
+
+model Quiz {
+  id                           String   @id
+  title                        String
+  description                  String?
+  courseId                     String?
+  courseTitle                  String?
+  instructorId                 String?
+  quizKind                     String?
+  lessonId                     String?
+  instructions                 String?
+  durationMinutes              Int
+  totalMarks                   Float
+  passingMarks                 Float
+  passingPercentage            Float
+  maxAttempts                  Int
+  shuffleQuestions             Boolean  @default(false)
+  shuffleOptions               Boolean  @default(false)
+  showResultsInstantly         Boolean  @default(true)
+  issueCertificateOnPass       Boolean  @default(false)
+  certificateTemplate          String?
+  enableProctoring             Boolean  @default(false)
+  maxProctorViolations         Int      @default(0)
+  autoSubmitOnProctorViolation Boolean  @default(false)
+  requireFullscreen            Boolean  @default(false)
+  questionItems                Json     @default("[]")
+  questions                    Int      @default(0)
+  attempts                     Int      @default(0)
+  status                       String
+  createdAt                    DateTime
+  updatedAt                    DateTime
+
+  @@index([courseId])
+  @@map("quizzes")
+}
+
+model QuizAttempt {
+  id                      String    @id
+  quizId                  String
+  quizTitle               String
+  studentId               String
+  studentName             String
+  studentEmail            String
+  startedAt               DateTime
+  submittedAt             DateTime?
+  answers                 Json      @default("{}")
+  score                   Float     @default(0)
+  totalMarks              Float     @default(0)
+  percentage              Float     @default(0)
+  passed                  Boolean   @default(false)
+  timeTakenSeconds        Int       @default(0)
+  status                  String
+  certificateId           String?
+  tabSwitchCount          Int?
+  proctoringViolations    Json?
+  autoSubmittedByProctor  Boolean?
+  questionResults         Json?
+  createdAt               DateTime
+  updatedAt               DateTime
+
+  @@index([quizId])
+  @@index([studentId])
+  @@map("quiz_attempts")
+}
+
+model Certificate {
+  id             String   @id
+  certificateNo  String   @unique
+  studentId      String
+  studentName    String
+  studentEmail   String?
+  courseTitle    String
+  quizTitle      String
+  quizId         String
+  attemptId      String
+  score          Float
+  percentage     Float
+  issuedAt       DateTime
+  verifyUrl      String
+  qrCodeDataUrl  String?
+  template       String?
+  status         String
+  createdAt      DateTime
+  updatedAt      DateTime
+
+  @@index([studentId])
+  @@map("certificates")
+}
+
+model LiveClass {
+  id              String   @id
+  title           String
+  courseId        String?
+  sectionId       String?
+  instructorName  String
+  description     String?
+  scheduledAt     DateTime
+  duration        String
+  enrolled        Int      @default(0)
+  status          String
+  platform        String
+  meetingUrl      String?
+  meetingId       String?
+  passcode        String?
+  youtubeLiveUrl  String?
+  createdAt       DateTime
+  updatedAt       DateTime
+
+  @@index([courseId])
+  @@map("live_classes")
+}
+
+model Payment {
+  id            String   @id
+  orderId       String
+  orderNo       String?
+  userId        String?
+  studentName   String
+  studentEmail  String?
+  courseId      String?
+  courseTitle   String?
+  amount        Float
+  method        String
+  status        String
+  transactionId String?
+  createdAt     DateTime
+  updatedAt     DateTime
+
+  @@index([orderId])
+  @@index([userId])
+  @@map("payments")
+}
+
+model Order {
+  id             String   @id
+  orderNo        String   @unique
+  userId         String?
+  studentName    String
+  studentEmail   String?
+  courseId       String?
+  courseTitle    String
+  amount         Float
+  discount       Float?
+  couponCode     String?
+  status         String
+  paymentId      String?
+  billingAddress Json?
+  createdAt      DateTime
+  updatedAt      DateTime
+
+  @@index([userId])
+  @@map("orders")
+}
+
+model Subscription {
+  id            String   @id
+  userId        String?
+  studentName   String
+  studentEmail  String?
+  plan          String
+  amount        Float
+  startDate     DateTime
+  endDate       DateTime
+  status        String
+  autoRenew     Boolean?
+  paymentMethod String?
+  transactionId String?
+  createdAt     DateTime
+  updatedAt     DateTime
+
+  @@index([userId])
+  @@map("subscriptions")
+}
+
+model Coupon {
+  id           String   @id
+  code         String   @unique
+  discount     Float
+  discountType String
+  usageLimit   Int
+  usedCount    Int      @default(0)
+  expiresAt    DateTime
+  status       String
+  createdAt    DateTime
+  updatedAt    DateTime
+
+  @@map("coupons")
+}
+
+model Blog {
+  id          String    @id
+  title       String
+  slug        String?
+  category    String
+  author      String
+  excerpt     String?
+  content     String?
+  coverImage  String?
+  readTime    String?
+  status      String
+  publishedAt DateTime?
+  createdAt   DateTime
+  updatedAt   DateTime
+
+  @@map("blogs")
+}
+
+model Event {
+  id        String   @id
+  title     String
+  date      DateTime
+  location  String
+  attendees Int      @default(0)
+  status    String
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@map("events")
+}
+
+model Testimonial {
+  id        String   @id
+  name      String
+  role      String
+  quote     String
+  rating    Float
+  avatarUrl String?
+  status    String
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@map("testimonials")
+}
+
+model GalleryItem {
+  id        String   @id
+  title     String
+  imageUrl  String
+  category  String
+  status    String
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@map("gallery")
+}
+
+model CmsPage {
+  id             String   @id
+  title          String
+  slug           String   @unique
+  status         String
+  content        String
+  excerpt        String?
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime
+  updatedAt      DateTime
+
+  @@map("cms_pages")
+}
+
+model FaqItem {
+  id        String   @id
+  question  String
+  answer    String
+  category  String
+  status    String
+  order     Int      @default(0)
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@map("faq")
+}
+
+model Role {
+  id          String   @id
+  name        String
+  permissions Json     @default("[]")
+  userCount   Int      @default(0)
+  createdAt   DateTime
+  updatedAt   DateTime
+
+  @@map("roles")
+}
+
+model SystemLog {
+  id        String   @id
+  action    String
+  user      String
+  module    String
+  ip        String
+  level     String
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@map("system_logs")
+}
+
+model Activity {
+  id        String   @id
+  message   String
+  type      String
+  color     String
+  userId    String?
+  audience  String?
+  readBy    Json?
+  href      String?
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@index([userId])
+  @@map("activities")
+}
+
+model NewsletterSubscriber {
+  id        String   @id
+  email     String   @unique
+  status    String
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@map("newsletter_subscribers")
+}
+
+model EmailOutboxItem {
+  id          String   @id
+  to          String
+  subject     String
+  body        String
+  status      String
+  relatedType String?
+  createdAt   DateTime
+  updatedAt   DateTime
+
+  @@map("email_outbox")
+}
+
+/// Singleton row (id = "default") storing site-wide settings as JSON
+model AppSetting {
+  id        String   @id @default("default")
+  settings  Json
+  updatedAt DateTime @updatedAt
+
+  @@map("app_settings")
+}

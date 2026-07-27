@@ -1,33 +1,109 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { mergeAppSettings } from "@/lib/certificate-settings";
 import { hashPassword } from "@/lib/auth/password";
+import { prisma } from "@/lib/prisma";
+import { prismaRowsToAdminDatabase, syncAdminDatabaseToPrisma } from "./db-prisma-mapper";
 import { migrateOrdersAndPayments } from "./migrate-orders";
 import { createSeedDatabase } from "./seed";
-import type { AdminDatabase, CollectionKey } from "./types";
-
-const DB_PATH = path.join(process.cwd(), "data", "admin-db.json");
+import type { AdminDatabase, AppSettings, CollectionKey } from "./types";
 
 let writeQueue: Promise<void> = Promise.resolve();
 
-async function ensureDb(): Promise<AdminDatabase> {
-  try {
-    await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
-    const raw = await fs.readFile(DB_PATH, "utf8");
-    const parsed = JSON.parse(raw) as AdminDatabase;
-    const { db, authDirty } = migrateDb(parsed);
-    const ordersDirty = migrateOrdersAndPayments(db);
-    db.settings = mergeAppSettings(db.settings);
-    if (ordersDirty || authDirty) {
-      await fs.writeFile(DB_PATH, JSON.stringify(db, null, 2), "utf8");
-    }
-    return db;
-  } catch {
-    const seed = createSeedDatabase();
-    seed.settings = mergeAppSettings(seed.settings);
-    await fs.writeFile(DB_PATH, JSON.stringify(seed, null, 2), "utf8");
-    return seed;
-  }
+async function loadFromPrisma(): Promise<AdminDatabase> {
+  const [
+    users,
+    instructors,
+    enrollments,
+    categories,
+    courses,
+    lessons,
+    assignments,
+    assignmentSubmissions,
+    quizzes,
+    quizAttempts,
+    certificates,
+    liveClasses,
+    payments,
+    orders,
+    subscriptions,
+    coupons,
+    blogs,
+    events,
+    testimonials,
+    gallery,
+    cmsPages,
+    faq,
+    roles,
+    systemLogs,
+    activities,
+    newsletterSubscribers,
+    emailOutbox,
+    appSetting,
+  ] = await Promise.all([
+    prisma.user.findMany(),
+    prisma.instructor.findMany(),
+    prisma.enrollment.findMany(),
+    prisma.category.findMany(),
+    prisma.course.findMany(),
+    prisma.lesson.findMany(),
+    prisma.assignment.findMany(),
+    prisma.assignmentSubmission.findMany(),
+    prisma.quiz.findMany(),
+    prisma.quizAttempt.findMany(),
+    prisma.certificate.findMany(),
+    prisma.liveClass.findMany(),
+    prisma.payment.findMany(),
+    prisma.order.findMany(),
+    prisma.subscription.findMany(),
+    prisma.coupon.findMany(),
+    prisma.blog.findMany(),
+    prisma.event.findMany(),
+    prisma.testimonial.findMany(),
+    prisma.galleryItem.findMany(),
+    prisma.cmsPage.findMany(),
+    prisma.faqItem.findMany(),
+    prisma.role.findMany(),
+    prisma.systemLog.findMany(),
+    prisma.activity.findMany(),
+    prisma.newsletterSubscriber.findMany(),
+    prisma.emailOutboxItem.findMany(),
+    prisma.appSetting.findUnique({ where: { id: "default" } }),
+  ]);
+
+  const seed = createSeedDatabase();
+  const settings = mergeAppSettings(
+    (appSetting?.settings as AppSettings | undefined) ?? seed.settings,
+  );
+
+  return prismaRowsToAdminDatabase({
+    users,
+    instructors,
+    enrollments,
+    categories,
+    courses,
+    lessons,
+    assignments,
+    assignmentSubmissions,
+    quizzes,
+    quizAttempts,
+    certificates,
+    liveClasses,
+    payments,
+    orders,
+    subscriptions,
+    coupons,
+    blogs,
+    events,
+    testimonials,
+    gallery,
+    cmsPages,
+    faq,
+    roles,
+    systemLogs,
+    activities,
+    newsletterSubscribers,
+    emailOutbox,
+    settings,
+  });
 }
 
 function migrateDb(db: AdminDatabase): { db: AdminDatabase; authDirty: boolean } {
@@ -71,14 +147,38 @@ function migrateDb(db: AdminDatabase): { db: AdminDatabase; authDirty: boolean }
   return { db, authDirty: authDirty || structureDirty };
 }
 
+async function ensureDb(): Promise<AdminDatabase> {
+  const userCount = await prisma.user.count();
+  if (userCount === 0) {
+    const seed = createSeedDatabase();
+    seed.settings = mergeAppSettings(seed.settings);
+    await writeDb(seed);
+    return seed;
+  }
+
+  let db = await loadFromPrisma();
+  const { db: migrated, authDirty } = migrateDb(db);
+  db = migrated;
+  const ordersDirty = migrateOrdersAndPayments(db);
+  db.settings = mergeAppSettings(db.settings);
+
+  if (ordersDirty || authDirty) {
+    await writeDb(db);
+  }
+
+  return db;
+}
+
 export async function readDb(): Promise<AdminDatabase> {
   return ensureDb();
 }
 
 export async function writeDb(data: AdminDatabase): Promise<void> {
   writeQueue = writeQueue.then(async () => {
-    await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
-    await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), "utf8");
+    data.settings = mergeAppSettings(data.settings);
+    await prisma.$transaction(async (tx) => {
+      await syncAdminDatabaseToPrisma(data, tx);
+    });
   });
   await writeQueue;
 }
@@ -120,5 +220,5 @@ export async function importDb(data: AdminDatabase): Promise<AdminDatabase> {
 }
 
 export function getDbPath() {
-  return DB_PATH;
+  return process.env.DATABASE_URL ?? "postgresql://localhost:5432/navbharat";
 }

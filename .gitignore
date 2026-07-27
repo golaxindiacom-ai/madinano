@@ -40,5 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local admin database
+# local admin database (legacy JSON — use Postgres via Prisma now)
 /data/admin-db.json
+
+# generated Prisma client
+/src/generated/prisma
+
+/src/generated/prisma
