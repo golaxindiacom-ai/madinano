@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   description:
     "Navbharat Gurukulam is the world-class learning platform for ambitious learners. Live classes, expert mentors, and industry-recognised certificates.",
   authors: [{ name: "Navbharat Gurukulam" }],
+  icons: {
+    icon: [{ url: "/images/ngrf-logo.png", type: "image/png" }],
+    apple: [{ url: "/images/ngrf-logo.png", type: "image/png" }],
+  },
   openGraph: {
     title: "Navbharat Gurukulam — Premium Learning Management Platform",
     description:
