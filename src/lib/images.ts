@@ -1,0 +1,17 @@
+export const images = {
+  logo: "/images/ngrf-logo.png",
+  heroStudent: "/images/hero-student-new.jpg",
+  heroBanner: "/images/hero-navbharat.png",
+  crest: "/images/crest-emblem.png",
+  courseWeb: "/images/course-webdev.jpg",
+  courseData: "/images/course-datascience.jpg",
+  courseDesign: "/images/course-design.jpg",
+  courseMkt: "/images/course-marketing.jpg",
+  courseMobile: "/images/course-mobile.jpg",
+  courseBiz: "/images/course-business.jpg",
+  inst1: "/images/instructor-1.jpg",
+  inst2: "/images/instructor-2.jpg",
+  inst3: "/images/instructor-3.jpg",
+  inst4: "/images/instructor-4.jpg",
+  appMockup: "/images/app-mockup.jpg",
+} as const;

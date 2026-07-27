@@ -1,26 +1,230 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: var(--font-poppins), "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-poppins), "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-lavender: var(--lavender);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-maroon: var(--maroon);
+  --color-maroon-foreground: var(--maroon-foreground);
+  --color-forest: var(--forest);
+  --color-forest-foreground: var(--forest-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+
+  /* Academic theme — maroon primary + gold accent (matches reference) */
+  --background: oklch(0.995 0.002 60);
+  --surface: oklch(0.975 0.006 40);
+  --lavender: oklch(0.97 0.012 30);
+
+  --foreground: oklch(0.30 0.015 40);
+  --ink: oklch(0.20 0.02 30);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.30 0.015 40);
+
+  /* Maroon — primary CTAs, links, icons, accents */
+  --primary: oklch(0.42 0.135 18);
+  --primary-foreground: oklch(0.99 0 0);
+
+  /* Maroon alias — register, enroll */
+  --maroon: oklch(0.42 0.135 18);
+  --maroon-foreground: oklch(0.99 0 0);
+
+  /* Deep maroon — footer / dark bands */
+  --forest: oklch(0.33 0.11 18);
+  --forest-foreground: oklch(0.99 0 0);
+
+  /* Gold / amber — prices, subscribe, highlights */
+  --gold: oklch(0.66 0.13 72);
+  --gold-foreground: oklch(1 0 0);
+
+  --secondary: oklch(0.96 0.012 40);
+  --secondary-foreground: oklch(0.30 0.015 40);
+
+  --muted: oklch(0.96 0.006 60);
+  --muted-foreground: oklch(0.48 0.015 40);
+
+  --accent: oklch(0.95 0.03 25);
+  --accent-foreground: oklch(0.42 0.135 18);
+
+  --border: oklch(0.90 0.008 60);
+  --input: oklch(0.94 0.006 60);
+  --ring: oklch(0.42 0.135 18);
+
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --shadow-card: 0 1px 3px oklch(0.2 0.02 30 / 0.06), 0 8px 24px oklch(0.2 0.02 30 / 0.08);
+  --shadow-float: 0 16px 40px -8px oklch(0.2 0.04 30 / 0.14);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    min-width: 0;
+  }
+  img,
+  video {
+    max-width: 100%;
+  }
+  ::selection {
+    background: oklch(0.42 0.135 18 / 0.2);
+    color: var(--ink);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+@utility shadow-float {
+  box-shadow: var(--shadow-float);
+}
+@utility shadow-glow {
+  box-shadow: 0 0 0 1px oklch(0.42 0.135 18 / 0.25), 0 16px 48px -8px oklch(0.42 0.135 18 / 0.2);
+}
+
+@utility bg-hero-soft {
+  background:
+    linear-gradient(105deg, oklch(0.99 0.01 95 / 0.95) 0%, oklch(0.97 0.02 60 / 0.85) 45%, oklch(0.95 0.03 75 / 0.35) 100%),
+    linear-gradient(135deg, oklch(0.42 0.135 18 / 0.07) 0%, transparent 45%, oklch(0.35 0.08 145 / 0.1) 100%),
+    oklch(0.97 0.02 60);
+}
+
+@utility bg-hero-research {
+  background:
+    linear-gradient(105deg, oklch(0.99 0.01 95 / 0.94) 0%, oklch(0.97 0.02 60 / 0.82) 42%, oklch(0.95 0.03 75 / 0.4) 72%, oklch(0.92 0.02 85 / 0.2) 100%),
+    linear-gradient(135deg, oklch(0.42 0.135 18 / 0.08) 0%, oklch(0.55 0.12 75 / 0.06) 50%, oklch(0.35 0.08 145 / 0.12) 100%),
+    linear-gradient(180deg, oklch(0.97 0.02 60) 0%, oklch(0.94 0.025 80) 100%);
+}
+
+@utility text-gradient-green {
+  color: var(--maroon);
+}
+
+@utility text-maroon {
+  color: var(--maroon);
+}
+
+@utility bg-maroon {
+  background-color: var(--maroon);
+}
+
+@utility bg-forest {
+  background-color: var(--forest);
+}
+
+@utility text-gold {
+  color: var(--gold);
+}
+
+@utility bg-gold {
+  background-color: var(--gold);
+}
+
+@utility btn-enroll {
+  background-color: var(--maroon);
+  color: var(--maroon-foreground);
+}
+
+@utility bg-section-paper {
+  background-color: oklch(0.995 0.002 60);
+}
+
+@utility bg-section-cream {
+  background-color: oklch(0.975 0.012 75);
+}
+
+@utility bg-section-blush {
+  background-color: oklch(0.97 0.018 25);
+}
+
+@utility bg-section-sand {
+  background-color: oklch(0.97 0.02 85);
+}
+
+@utility bg-section-mist {
+  background-color: oklch(0.965 0.01 145);
+}
+
+@utility bg-section-rose {
+  background:
+    linear-gradient(180deg, oklch(0.96 0.025 20) 0%, oklch(0.98 0.012 30) 100%);
+}
+
+@utility bg-section-gold {
+  background:
+    linear-gradient(180deg, oklch(0.97 0.03 80) 0%, oklch(0.985 0.015 70) 100%);
+}
+
+/* Home page section bands — plain CSS so backgrounds always apply */
+.bg-home-trusted { background-color: #f3e8d8 !important; }
+.bg-home-courses { background-color: #ffffff !important; }
+.bg-home-why { background-color: #f8e9ea !important; }
+.bg-home-categories { background-color: #f5efd8 !important; }
+.bg-home-process { background-color: #e8f2ea !important; }
+.bg-home-live { background-color: #f6e6ef !important; }
+.bg-home-instructors { background-color: #efe8e1 !important; }
+.bg-home-testimonials { background-color: #e6f0f4 !important; }
+.bg-home-app { background-color: #eceaf5 !important; }
+.bg-home-blog { background-color: #f7ecd0 !important; }
+.bg-home-faq { background-color: #e7f1e8 !important; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@utility animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+@keyframes floaty {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@utility animate-floaty {
+  animation: floaty 6s ease-in-out infinite;
 }
