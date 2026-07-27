@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -15,23 +16,45 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const siteName = "Navbharat Gurukulam";
+const defaultTitle = `${siteName} — Premium Learning Management Platform`;
+const defaultDescription =
+  "Navbharat Gurukulam is the world-class learning platform for ambitious learners. Live classes, expert mentors, and industry-recognised certificates.";
+const ogDescription =
+  "Live classes, expert mentors, and industry-recognised certificates. Learn today, lead tomorrow.";
+const ogImage = "/images/hero-navbharat.png";
+
 export const metadata: Metadata = {
-  title: "Navbharat Gurukulam — Premium Learning Management Platform",
-  description:
-    "Navbharat Gurukulam is the world-class learning platform for ambitious learners. Live classes, expert mentors, and industry-recognised certificates.",
-  authors: [{ name: "Navbharat Gurukulam" }],
+  metadataBase: new URL(getSiteUrl()),
+  title: defaultTitle,
+  description: defaultDescription,
+  authors: [{ name: siteName }],
+  applicationName: siteName,
   icons: {
     icon: [{ url: "/images/ngrf-logo.png", type: "image/png" }],
     apple: [{ url: "/images/ngrf-logo.png", type: "image/png" }],
   },
   openGraph: {
-    title: "Navbharat Gurukulam — Premium Learning Management Platform",
-    description:
-      "Live classes, expert mentors, and industry-recognised certificates. Learn today, lead tomorrow.",
+    title: defaultTitle,
+    description: ogDescription,
+    url: "/",
+    siteName,
+    locale: "en_IN",
     type: "website",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: siteName,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    title: defaultTitle,
+    description: ogDescription,
+    images: [ogImage],
   },
 };
 
