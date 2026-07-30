@@ -20,6 +20,22 @@ import {
 } from "lucide-react";
 import { adminFetch, formatDate } from "@/lib/admin/client";
 import type { Course, User, UserDetailPayload, UserInput, UserStats } from "@/lib/admin/types";
+import {
+  adminPageClass,
+  adminKpiGridClass,
+  adminFilterBarClass,
+  adminPageActionsClass,
+  adminFilterSelectClass,
+  adminTabBarClass,
+  AdminPageHeader,
+  AdminDesktopTable,
+  AdminMobileList,
+  AdminMobileCard,
+  AdminMobileRow,
+  AdminMobileActions,
+  AdminLoadingState,
+  AdminEmptyState,
+} from "@/components/admin/admin-layout";
 import { cn } from "@/lib/utils";
 
 const ROLE_OPTIONS = [
@@ -251,23 +267,23 @@ export function UsersPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold text-ink">User Management</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Manage students, instructors, admins & enrollments</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={exportCsv} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
-            <Download className="h-4 w-4" /> Export CSV
-          </button>
-          <button type="button" onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-            <Plus className="h-4 w-4" /> Add User
-          </button>
-        </div>
-      </div>
+    <div className={adminPageClass}>
+      <AdminPageHeader
+        title="User Management"
+        description="Manage students, instructors, admins & enrollments"
+        actions={
+          <>
+            <button type="button" onClick={exportCsv} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold sm:flex-none">
+              <Download className="h-4 w-4" /> Export CSV
+            </button>
+            <button type="button" onClick={openCreate} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground sm:flex-none">
+              <Plus className="h-4 w-4" /> Add User
+            </button>
+          </>
+        }
+      />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className={adminKpiGridClass}>
         {kpis.map((k) => (
           <div key={k.label} className={cn("rounded-2xl border border-border bg-gradient-to-br p-4", k.tint)}>
             <div className="flex items-center justify-between">
@@ -279,8 +295,8 @@ export function UsersPage() {
         ))}
       </div>
 
-      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
+      <div className={cn("rounded-2xl border border-border bg-card p-4", adminFilterBarClass)}>
+        <div className="relative min-w-0 flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             value={search}
@@ -289,10 +305,10 @@ export function UsersPage() {
             className="w-full rounded-lg border border-border bg-background py-2.5 pl-10 pr-4 text-sm"
           />
         </div>
-        <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2.5 text-sm">
+        <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} className={adminFilterSelectClass}>
           {ROLE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2.5 text-sm">
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={adminFilterSelectClass}>
           {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         <button type="button" onClick={load} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2.5 text-sm font-semibold">
@@ -311,8 +327,8 @@ export function UsersPage() {
 
       {error && <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
 
-      <div className="overflow-x-auto rounded-2xl border border-border bg-card">
-        <table className="w-full min-w-[900px] text-left text-sm">
+      <AdminDesktopTable>
+        <table className="w-full min-w-[760px] text-left text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/40 text-xs uppercase text-muted-foreground">
               <th className="px-4 py-3"><input type="checkbox" checked={users.length > 0 && selected.size === users.length} onChange={toggleAll} /></th>
@@ -371,7 +387,46 @@ export function UsersPage() {
             )}
           </tbody>
         </table>
-      </div>
+      </AdminDesktopTable>
+
+      <AdminMobileList>
+        {loading ? (
+          <AdminLoadingState message="Loading users..." />
+        ) : users.length === 0 ? (
+          <AdminEmptyState message="No users found" />
+        ) : (
+          users.map((user) => (
+            <AdminMobileCard key={user.id}>
+              <div className="flex items-start gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                  {initials(user.name)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-ink">{user.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize", roleBadge(user.role))}>{user.role}</span>
+                    <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize", statusBadge(user.status))}>{user.status}</span>
+                  </div>
+                </div>
+              </div>
+              <AdminMobileRow label="Location">{[user.city, user.country].filter(Boolean).join(", ") || "—"}</AdminMobileRow>
+              <AdminMobileRow label="Joined">{formatDate(user.createdAt)}</AdminMobileRow>
+              <AdminMobileActions>
+                <button type="button" onClick={() => openDetail(user)} className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Eye className="h-3.5 w-3.5" /> View
+                </button>
+                <button type="button" onClick={() => openEdit(user)} className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Pencil className="h-3.5 w-3.5" /> Edit
+                </button>
+                <button type="button" onClick={() => deleteUser(user)} className="inline-flex items-center justify-center rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </AdminMobileActions>
+            </AdminMobileCard>
+          ))
+        )}
+      </AdminMobileList>
 
       {/* Create / Edit Modal */}
       {modalOpen && (
@@ -454,13 +509,13 @@ export function UsersPage() {
               <button type="button" onClick={() => setDetail(null)} className="grid h-8 w-8 place-items-center rounded-lg border"><X className="h-4 w-4" /></button>
             </div>
 
-            <div className="flex gap-1 border-b border-border px-4">
+            <div className={adminTabBarClass}>
               {(["overview", "enrollments", "exams", "certificates"] as const).map((tab) => (
                 <button
                   key={tab}
                   type="button"
                   onClick={() => setDetailTab(tab)}
-                  className={cn("px-3 py-2.5 text-xs font-semibold capitalize", detailTab === tab ? "border-b-2 border-primary text-primary" : "text-muted-foreground")}
+                  className={cn("shrink-0 px-3 py-2.5 text-xs font-semibold capitalize", detailTab === tab ? "border-b-2 border-primary text-primary" : "text-muted-foreground")}
                 >
                   {tab}
                 </button>
@@ -476,7 +531,7 @@ export function UsersPage() {
                   <div><dt className="text-muted-foreground">Last Updated</dt><dd className="font-semibold">{formatDate(detail.user.updatedAt)}</dd></div>
                   {detail.user.instructorId && <div><dt className="text-muted-foreground">Instructor Profile</dt><dd className="font-mono text-xs">{detail.user.instructorId}</dd></div>}
                   {detail.user.notes && <div><dt className="text-muted-foreground">Notes</dt><dd className="text-ink">{detail.user.notes}</dd></div>}
-                  <div className="grid grid-cols-3 gap-2 pt-2">
+                  <div className="grid grid-cols-2 gap-2 pt-2 sm:grid-cols-3">
                     <div className="rounded-lg border p-3 text-center"><BookOpen className="mx-auto h-4 w-4 text-primary" /><p className="mt-1 text-lg font-bold">{detail.enrollments.length}</p><p className="text-[10px] text-muted-foreground">Courses</p></div>
                     <div className="rounded-lg border p-3 text-center"><ClipboardList className="mx-auto h-4 w-4 text-primary" /><p className="mt-1 text-lg font-bold">{detail.attempts.length}</p><p className="text-[10px] text-muted-foreground">Exams</p></div>
                     <div className="rounded-lg border p-3 text-center"><Award className="mx-auto h-4 w-4 text-primary" /><p className="mt-1 text-lg font-bold">{detail.certificates.length}</p><p className="text-[10px] text-muted-foreground">Certs</p></div>
@@ -505,8 +560,8 @@ export function UsersPage() {
               {detailTab === "enrollments" && (
                 <div className="space-y-4">
                   {detail.user.role === "student" && (
-                    <div className="flex gap-2">
-                      <select value={enrollCourseId} onChange={(e) => setEnrollCourseId(e.target.value)} className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm">
+                    <div className="flex flex-col gap-2 sm:flex-row">
+                      <select value={enrollCourseId} onChange={(e) => setEnrollCourseId(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm">
                         <option value="">Select course to enroll...</option>
                         {courses.filter((c) => !detail.enrollments.some((e) => e.courseId === c.id && e.status !== "dropped")).map((c) => (
                           <option key={c.id} value={c.id}>{c.title}</option>

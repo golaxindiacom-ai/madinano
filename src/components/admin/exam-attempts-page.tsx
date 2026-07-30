@@ -25,6 +25,20 @@ import type {
   QuizAttemptStats,
 } from "@/lib/admin/types";
 import { cardClass, inputClass, selectClass } from "@/components/admin/course-form-styles";
+import {
+  adminPageClass,
+  adminKpiGridClass,
+  adminFilterBarClass,
+  adminFilterSelectClass,
+  AdminPageHeader,
+  AdminDesktopTable,
+  AdminMobileList,
+  AdminMobileCard,
+  AdminMobileRow,
+  AdminMobileActions,
+  AdminLoadingState,
+  AdminEmptyState,
+} from "@/components/admin/admin-layout";
 import { cn } from "@/lib/utils";
 
 type QuizOption = { id: string; title: string; courseTitle?: string };
@@ -153,26 +167,24 @@ export function ExamAttemptsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold text-ink">Exam Attempts</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Monitor student exam attempts, scores, proctoring & certificates
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button type="button" onClick={exportCsv} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
-            <Download className="h-4 w-4" /> Export
-          </button>
-          <button type="button" onClick={load} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
-            <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
-          </button>
-        </div>
-      </div>
+    <div className={adminPageClass}>
+      <AdminPageHeader
+        title="Exam Attempts"
+        description="Monitor student exam attempts, scores, proctoring & certificates"
+        actions={
+          <>
+            <button type="button" onClick={exportCsv} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold sm:flex-none">
+              <Download className="h-4 w-4" /> Export
+            </button>
+            <button type="button" onClick={load} className="inline-flex items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+              <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+            </button>
+          </>
+        }
+      />
 
       {stats && (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
+        <div className={adminKpiGridClass}>
           {[
             { label: "Total", value: stats.total, icon: FileText },
             { label: "In Progress", value: stats.inProgress, icon: Clock },
@@ -194,37 +206,24 @@ export function ExamAttemptsPage() {
         </div>
       )}
 
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
+      <div className={cn("rounded-2xl border border-border bg-card p-4", adminFilterBarClass)}>
+        <div className="relative min-w-0 flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search student, email, exam..."
-            className={cn(inputClass, "pl-9")}
-          />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search student, email, exam..." className={cn(inputClass, "pl-9")} />
         </div>
-        <select value={quizFilter} onChange={(e) => setQuizFilter(e.target.value)} className={selectClass}>
+        <select value={quizFilter} onChange={(e) => setQuizFilter(e.target.value)} className={adminFilterSelectClass}>
           <option value="">All Exams</option>
-          {quizzes.map((q) => (
-            <option key={q.id} value={q.id}>{q.title}</option>
-          ))}
+          {quizzes.map((q) => <option key={q.id} value={q.id}>{q.title}</option>)}
         </select>
-        <select value={studentFilter} onChange={(e) => setStudentFilter(e.target.value)} className={selectClass}>
+        <select value={studentFilter} onChange={(e) => setStudentFilter(e.target.value)} className={adminFilterSelectClass}>
           <option value="">All Students</option>
-          {students.map((s) => (
-            <option key={s.id} value={s.id}>{s.name}</option>
-          ))}
+          {students.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
-        <select value={resultFilter} onChange={(e) => setResultFilter(e.target.value)} className={selectClass}>
-          {RESULT_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
+        <select value={resultFilter} onChange={(e) => setResultFilter(e.target.value)} className={adminFilterSelectClass}>
+          {RESULT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={selectClass}>
-          {STATUS_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={adminFilterSelectClass}>
+          {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         <label className="flex items-center gap-2 text-sm font-semibold whitespace-nowrap">
           <input type="checkbox" checked={violationsOnly} onChange={(e) => setViolationsOnly(e.target.checked)} />
@@ -236,7 +235,7 @@ export function ExamAttemptsPage() {
         <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
       )}
 
-      <div className={cn(cardClass, "overflow-x-auto")}>
+      <AdminDesktopTable>
         <table className="w-full min-w-[1000px] text-sm">
           <thead>
             <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
@@ -321,7 +320,48 @@ export function ExamAttemptsPage() {
             )}
           </tbody>
         </table>
-      </div>
+      </AdminDesktopTable>
+
+      <AdminMobileList>
+        {loading ? (
+          <AdminLoadingState message="Loading attempts..." />
+        ) : items.length === 0 ? (
+          <AdminEmptyState message="No exam attempts yet" />
+        ) : (
+          items.map((a) => (
+            <AdminMobileCard key={a.id}>
+              <p className="font-semibold text-ink">{a.studentName}</p>
+              <p className="text-xs text-muted-foreground">{a.quizTitle}</p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase", statusBadge(a.status))}>{a.status.replace("_", " ")}</span>
+                {a.status !== "in_progress" && (
+                  <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold", a.passed ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700")}>
+                    {a.passed ? "Passed" : "Failed"}
+                  </span>
+                )}
+              </div>
+              <AdminMobileRow label="Score">
+                {a.status === "in_progress" ? "—" : `${a.percentage}% (${a.score}/${a.totalMarks})`}
+              </AdminMobileRow>
+              <AdminMobileRow label="Violations">{a.violationCount}</AdminMobileRow>
+              <AdminMobileRow label="Submitted">{a.submittedAt ? formatDate(a.submittedAt) : formatDate(a.startedAt)}</AdminMobileRow>
+              <AdminMobileActions>
+                <button type="button" onClick={() => openDetail(a)} className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Users className="h-3.5 w-3.5" /> View
+                </button>
+                {a.status !== "in_progress" && (
+                  <Link href={`/exams/${a.quizId}/result/${a.id}`} target="_blank" className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                    <FileText className="h-3.5 w-3.5" /> Result
+                  </Link>
+                )}
+                <button type="button" onClick={() => remove(a)} className="inline-flex items-center justify-center rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </AdminMobileActions>
+            </AdminMobileCard>
+          ))
+        )}
+      </AdminMobileList>
 
       {detail && (
         <div className="fixed inset-0 z-40 flex justify-end bg-black/40">

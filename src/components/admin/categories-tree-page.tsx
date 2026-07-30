@@ -27,6 +27,15 @@ import {
   selectClass,
   textareaClass,
 } from "@/components/admin/course-form-styles";
+import {
+  adminPageClass,
+  adminKpiGridClass,
+  adminFilterBarClass,
+  adminFilterSelectClass,
+  AdminPageHeader,
+  AdminLoadingState,
+  AdminEmptyState,
+} from "@/components/admin/admin-layout";
 import { cn } from "@/lib/utils";
 
 type TreeResponse = {
@@ -108,35 +117,38 @@ function TreeNode({
     <div>
       <div
         className={cn(
-          "flex flex-wrap items-center gap-2 rounded-xl border border-border px-3 py-2.5 sm:px-4",
+          "flex flex-col gap-3 rounded-xl border border-border px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2 sm:px-4 sm:py-2.5",
           levelBg[node.level - 1],
         )}
-        style={{ marginLeft: depth * 20 }}
+        style={{ marginLeft: depth * 12 }}
       >
-        {hasChildren ? (
-          <button type="button" onClick={() => toggle(node.id)} className="shrink-0 text-muted-foreground">
-            {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-          </button>
-        ) : (
-          <span className="w-4 shrink-0" />
-        )}
-        <FolderTree className={cn("h-4 w-4 shrink-0", levelColors[node.level - 1])} />
-        <div className="min-w-0 flex-1">
-          <p className="font-semibold text-ink">{node.name}</p>
-          <p className="text-xs text-muted-foreground">
-            {getCategoryLevelLabel(node.level)} · /{node.slug} · {node.courseCount} course{node.courseCount !== 1 ? "s" : ""}
-            {node.children.length > 0 ? ` · ${node.children.length} sub` : ""}
-          </p>
-        </div>
-        <span
-          className={cn(
-            "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
-            node.status === "active" ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground",
+        <div className="flex min-w-0 items-start gap-2">
+          {hasChildren ? (
+            <button type="button" onClick={() => toggle(node.id)} className="mt-0.5 shrink-0 text-muted-foreground">
+              {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            </button>
+          ) : (
+            <span className="w-4 shrink-0" />
           )}
-        >
-          {node.status}
-        </span>
-        <div className="flex gap-1">
+          <FolderTree className={cn("mt-0.5 h-4 w-4 shrink-0", levelColors[node.level - 1])} />
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-ink">{node.name}</p>
+            <p className="text-xs text-muted-foreground">
+              {getCategoryLevelLabel(node.level)} · /{node.slug} · {node.courseCount} course{node.courseCount !== 1 ? "s" : ""}
+              {node.children.length > 0 ? ` · ${node.children.length} sub` : ""}
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:ml-auto sm:justify-end">
+          <span
+            className={cn(
+              "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
+              node.status === "active" ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground",
+            )}
+          >
+            {node.status}
+          </span>
+          <div className="flex flex-wrap gap-1">
           <button
             type="button"
             onClick={() => onView(node)}
@@ -161,6 +173,7 @@ function TreeNode({
           <button type="button" onClick={() => onDelete(node)} className="rounded-md border border-red-200 p-1.5 text-red-600 hover:bg-red-50">
             <Trash2 className="h-3.5 w-3.5" />
           </button>
+          </div>
         </div>
       </div>
       {isOpen &&
@@ -331,31 +344,21 @@ export function CategoriesTreePage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold text-ink">Course Categories</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Main → Sub → Sub-Sub hierarchy for filtering courses on the website
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={load}
-            className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold"
-          >
-            <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
-          </button>
-          <button
-            type="button"
-            onClick={openAddMain}
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground"
-          >
-            <Plus className="h-4 w-4" /> Add Main Category
-          </button>
-        </div>
-      </div>
+    <div className={adminPageClass}>
+      <AdminPageHeader
+        title="Course Categories"
+        description="Main → Sub → Sub-Sub hierarchy for filtering courses on the website"
+        actions={
+          <>
+            <button type="button" onClick={load} className="inline-flex items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+              <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+            </button>
+            <button type="button" onClick={openAddMain} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground sm:flex-none">
+              <Plus className="h-4 w-4" /> Add Main Category
+            </button>
+          </>
+        }
+      />
 
       <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-ink">
         <span className="font-semibold">Recommended flow:</span>{" "}
@@ -367,7 +370,7 @@ export function CategoriesTreePage() {
       </div>
 
       {stats && (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className={adminKpiGridClass}>
           {[
             { label: "Total Categories", value: stats.total, icon: FolderTree },
             { label: "Main (L1)", value: stats.level1, icon: Layers },
@@ -386,7 +389,7 @@ export function CategoriesTreePage() {
         </div>
       )}
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {[
           { level: 1, label: "Main Category", color: "border-maroon/30 bg-maroon/10 text-maroon" },
           { level: 2, label: "Sub Category", color: "border-gold/40 bg-gold/15 text-gold" },
@@ -398,25 +401,18 @@ export function CategoriesTreePage() {
         ))}
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
+      <div className={cn("rounded-2xl border border-border bg-card p-4", adminFilterBarClass)}>
+        <div className="relative min-w-0 flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name, slug, or path..."
-            className={cn(inputClass, "pl-9")}
-          />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name, slug, or path..." className={cn(inputClass, "pl-9")} />
         </div>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={selectClass}>
-          {STATUS_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={adminFilterSelectClass}>
+          {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-        <button type="button" onClick={expandAll} className="rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+        <button type="button" onClick={expandAll} className="inline-flex w-full items-center justify-center rounded-lg border border-border px-3 py-2.5 text-sm font-semibold sm:w-auto">
           Expand all
         </button>
-        <button type="button" onClick={collapseAll} className="rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+        <button type="button" onClick={collapseAll} className="inline-flex w-full items-center justify-center rounded-lg border border-border px-3 py-2.5 text-sm font-semibold sm:w-auto">
           Collapse all
         </button>
       </div>
@@ -427,19 +423,9 @@ export function CategoriesTreePage() {
 
       <div className={cn(cardClass, "space-y-2")}>
         {loading ? (
-          <p className="text-sm text-muted-foreground">Loading categories...</p>
+          <AdminLoadingState message="Loading categories..." />
         ) : filteredTree.length === 0 ? (
-          <div className="py-12 text-center">
-            <FolderTree className="mx-auto h-10 w-10 text-muted-foreground/40" />
-            <p className="mt-3 text-muted-foreground">
-              {tree.length === 0 ? "No categories yet" : "No categories match your filters"}
-            </p>
-            {tree.length === 0 && (
-              <button type="button" onClick={openAddMain} className="mt-2 text-sm font-semibold text-primary">
-                Add main category
-              </button>
-            )}
-          </div>
+          <AdminEmptyState message={tree.length === 0 ? "No categories yet" : "No categories match your filters"} />
         ) : (
           filteredTree.map((node) => (
             <TreeNode

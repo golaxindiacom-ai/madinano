@@ -25,6 +25,7 @@ import {
   AreaChart,
   Legend,
 } from "recharts";
+import { adminPageClass, adminKpiGridClass } from "@/components/admin/admin-layout";
 import { adminFetch } from "@/lib/admin/client";
 import type { DashboardStats } from "@/lib/admin/types";
 
@@ -171,8 +172,8 @@ export function AdminDashboard() {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <div className={adminPageClass}>
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-ink">Dashboard</h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -184,13 +185,13 @@ export function AdminDashboard() {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className={adminKpiGridClass}>
         {kpis.map((k) => (
           <KpiCard key={k.label} {...k} />
         ))}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[2fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr_1fr]">
         <div className="rounded-2xl border border-border bg-card p-5">
           <h3 className="text-base font-bold text-ink">Overview Analytics</h3>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -296,7 +297,7 @@ export function AdminDashboard() {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-5">
           <h3 className="text-base font-bold text-ink">Revenue Overview</h3>
           <p className="mt-2 text-2xl font-extrabold text-ink">

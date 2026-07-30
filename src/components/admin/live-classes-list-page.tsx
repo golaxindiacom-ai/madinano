@@ -38,6 +38,20 @@ import {
   selectClass,
   textareaClass,
 } from "@/components/admin/course-form-styles";
+import {
+  adminPageClass,
+  adminKpiGridClass,
+  adminFilterBarClass,
+  adminFilterSelectClass,
+  AdminPageHeader,
+  AdminDesktopTable,
+  AdminMobileList,
+  AdminMobileCard,
+  AdminMobileRow,
+  AdminMobileActions,
+  AdminLoadingState,
+  AdminEmptyState,
+} from "@/components/admin/admin-layout";
 import { cn } from "@/lib/utils";
 
 type CourseOption = {
@@ -253,26 +267,24 @@ export function LiveClassesListPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold text-ink">Live Classes</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Schedule & manage live sessions across courses
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button type="button" onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground">
-            <Plus className="h-4 w-4" /> New Live Class
-          </button>
-          <button type="button" onClick={exportCsv} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
-            <Download className="h-4 w-4" /> Export
-          </button>
-          <button type="button" onClick={load} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
-            <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
-          </button>
-        </div>
-      </div>
+    <div className={adminPageClass}>
+      <AdminPageHeader
+        title="Live Classes"
+        description="Schedule & manage live sessions across courses"
+        actions={
+          <>
+            <button type="button" onClick={openCreate} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground sm:flex-none">
+              <Plus className="h-4 w-4" /> New Live Class
+            </button>
+            <button type="button" onClick={exportCsv} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold sm:flex-none">
+              <Download className="h-4 w-4" /> Export
+            </button>
+            <button type="button" onClick={load} className="inline-flex items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+              <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+            </button>
+          </>
+        }
+      />
 
       <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-ink">
         <span className="font-semibold">How live classes work:</span>{" "}
@@ -288,7 +300,7 @@ export function LiveClassesListPage() {
       </div>
 
       {stats && (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
+        <div className={adminKpiGridClass}>
           {[
             { label: "Total", value: stats.total, icon: Video },
             { label: "Scheduled", value: stats.scheduled, icon: Calendar },
@@ -310,32 +322,21 @@ export function LiveClassesListPage() {
         </div>
       )}
 
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
+      <div className={cn("rounded-2xl border border-border bg-card p-4", adminFilterBarClass)}>
+        <div className="relative min-w-0 flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search title, instructor, course..."
-            className={cn(inputClass, "pl-9")}
-          />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search title, instructor, course..." className={cn(inputClass, "pl-9")} />
         </div>
-        <select value={courseFilter} onChange={(e) => setCourseFilter(e.target.value)} className={selectClass}>
+        <select value={courseFilter} onChange={(e) => setCourseFilter(e.target.value)} className={adminFilterSelectClass}>
           <option value="">All Courses</option>
-          {courses.map((c) => (
-            <option key={c.id} value={c.id}>{c.title}</option>
-          ))}
+          {courses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
         </select>
-        <select value={platformFilter} onChange={(e) => setPlatformFilter(e.target.value)} className={selectClass}>
+        <select value={platformFilter} onChange={(e) => setPlatformFilter(e.target.value)} className={adminFilterSelectClass}>
           <option value="all">All Platforms</option>
-          {platforms.map((p) => (
-            <option key={p.value} value={p.value}>{p.label}</option>
-          ))}
+          {platforms.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
         </select>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={selectClass}>
-          {STATUS_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={adminFilterSelectClass}>
+          {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={upcomingOnly} onChange={(e) => setUpcomingOnly(e.target.checked)} />
@@ -347,7 +348,7 @@ export function LiveClassesListPage() {
         <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
       )}
 
-      <div className={cn(cardClass, "overflow-x-auto")}>
+      <AdminDesktopTable>
         <table className="w-full min-w-[1100px] text-sm">
           <thead>
             <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
@@ -420,7 +421,42 @@ export function LiveClassesListPage() {
             )}
           </tbody>
         </table>
-      </div>
+      </AdminDesktopTable>
+
+      <AdminMobileList>
+        {loading ? (
+          <AdminLoadingState message="Loading live classes..." />
+        ) : items.length === 0 ? (
+          <AdminEmptyState message="No live classes yet" />
+        ) : (
+          items.map((l) => (
+            <AdminMobileCard key={l.id}>
+              <p className="font-semibold text-ink">{l.title}</p>
+              <p className="text-xs text-muted-foreground">{l.instructorName}</p>
+              <div className="mt-2">
+                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase", statusBadge(l.status))}>{l.status}</span>
+              </div>
+              <AdminMobileRow label="Course">{l.courseTitle ?? "—"}</AdminMobileRow>
+              <AdminMobileRow label="Platform">{l.platformLabel}</AdminMobileRow>
+              <AdminMobileRow label="Schedule">{formatDate(l.scheduledAt)} · {l.duration}</AdminMobileRow>
+              <AdminMobileRow label="Enrolled">{l.enrolled}</AdminMobileRow>
+              <AdminMobileActions>
+                {l.joinUrl && (
+                  <a href={l.joinUrl} target="_blank" rel="noreferrer" className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                    <ExternalLink className="h-3.5 w-3.5" /> Join
+                  </a>
+                )}
+                <button type="button" onClick={() => openDetail(l)} className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Eye className="h-3.5 w-3.5" /> View
+                </button>
+                <button type="button" onClick={() => openEdit(l)} className="inline-flex items-center justify-center rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Pencil className="h-3.5 w-3.5" />
+                </button>
+              </AdminMobileActions>
+            </AdminMobileCard>
+          ))
+        )}
+      </AdminMobileList>
 
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">

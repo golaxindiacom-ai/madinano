@@ -5,13 +5,62 @@ import { SiteHeader, SiteTopBar } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PageBand, PageHero } from "@/components/page-hero";
 import { Container } from "@/components/ui/container";
+import { cn } from "@/lib/utils";
 import type { CmsPage } from "@/lib/admin/types";
 
 type CmsContentPageProps = {
   slug: string;
   kicker?: string;
+  title?: string;
+  subtitle?: string;
+  /** When provided (including null), skips client fetch — use from server components. */
+  initialPage?: CmsPage | null;
   children?: React.ReactNode;
 };
+
+const DEFAULT_PAGE_HERO: Record<string, { title: string; subtitle?: string }> = {
+  about: {
+    title: "About Us",
+    subtitle: "Empowering learners worldwide through research-led education.",
+  },
+  "privacy-policy": {
+    title: "Privacy Policy",
+    subtitle: "How Navbharat Gurukulam collects, uses, and protects your information.",
+  },
+  terms: {
+    title: "Terms of Use",
+    subtitle: "Rules for using Navbharat Gurukulam courses, exams, and platform services.",
+  },
+};
+
+function slugToTitle(slug: string) {
+  return slug.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function Skeleton({ className }: { className?: string }) {
+  return <div className={cn("animate-pulse rounded-lg bg-muted/70", className)} />;
+}
+
+function CmsBodySkeleton() {
+  return (
+    <Container className="max-w-3xl space-y-6">
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+      </div>
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-11/12" />
+      </div>
+      <div className="space-y-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="h-14 rounded-xl" />
+        ))}
+      </div>
+    </Container>
+  );
+}
 
 function renderCmsBody(content: string) {
   const blocks = content
@@ -51,13 +100,38 @@ function renderCmsBody(content: string) {
   });
 }
 
-export function CmsContentPage({ slug, kicker = "Navbharat Gurukulam", children }: CmsContentPageProps) {
-  const [page, setPage] = useState<CmsPage | null>(null);
-  const [loading, setLoading] = useState(true);
+export function CmsContentPage({
+  slug,
+  kicker = "Navbharat Gurukulam",
+  title: titleProp,
+  subtitle: subtitleProp,
+  initialPage,
+  children,
+}: CmsContentPageProps) {
+  const hasServerData = initialPage !== undefined;
+  const [page, setPage] = useState<CmsPage | null>(initialPage ?? null);
+  const [loading, setLoading] = useState(!hasServerData);
   const [error, setError] = useState("");
-  const [notFound, setNotFound] = useState(false);
+  const [notFound, setNotFound] = useState(hasServerData && initialPage === null);
+
+  const fallbackHero = DEFAULT_PAGE_HERO[slug] ?? {
+    title: titleProp ?? slugToTitle(slug),
+    subtitle: subtitleProp,
+  };
+
+  const heroTitle =
+    notFound ? "Page not found" : error && !page ? "Unable to load" : page?.title ?? titleProp ?? fallbackHero.title;
+  const heroSubtitle =
+    notFound
+      ? "The page you are looking for is unavailable."
+      : error && !page
+        ? "Please refresh and try again."
+        : page?.excerpt ?? subtitleProp ?? fallbackHero.subtitle;
+  const breadcrumbLabel = page?.title ?? titleProp ?? fallbackHero.title;
 
   useEffect(() => {
+    if (hasServerData) return;
+
     const controller = new AbortController();
     setLoading(true);
     setError("");
@@ -88,71 +162,48 @@ export function CmsContentPage({ slug, kicker = "Navbharat Gurukulam", children 
       });
 
     return () => controller.abort();
-  }, [slug]);
-
-  const breadcrumbLabel = page?.title || slug.replace(/-/g, " ");
+  }, [slug, hasServerData]);
 
   return (
     <main className="min-h-screen bg-background">
       <SiteTopBar />
       <SiteHeader />
 
+      <PageHero
+        kicker={kicker}
+        title={heroTitle}
+        subtitle={heroSubtitle}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: breadcrumbLabel }]}
+      >
+        {children}
+      </PageHero>
+
       {loading ? (
         <PageBand tone="faq">
-          <Container className="py-16 text-center text-sm text-muted-foreground">
-            Loading page…
-          </Container>
+          <CmsBodySkeleton />
         </PageBand>
       ) : notFound ? (
-        <>
-          <PageHero
-            kicker={kicker}
-            title="Page not found"
-            subtitle="The page you are looking for is unavailable."
-            breadcrumbs={[{ label: "Home", href: "/" }, { label: "Not found" }]}
-          />
-          <PageBand tone="faq">
-            <Container className="max-w-3xl text-sm text-muted-foreground">
-              This CMS page has not been published yet.
-            </Container>
-          </PageBand>
-        </>
+        <PageBand tone="faq">
+          <Container className="max-w-3xl text-sm text-muted-foreground">
+            This CMS page has not been published yet.
+          </Container>
+        </PageBand>
       ) : error || !page ? (
-        <>
-          <PageHero
-            kicker={kicker}
-            title="Unable to load"
-            subtitle="Please refresh and try again."
-            breadcrumbs={[{ label: "Home", href: "/" }, { label: breadcrumbLabel }]}
-          />
-          <PageBand tone="faq">
-            <Container className="max-w-3xl text-sm text-red-600">
-              {error || "Something went wrong while loading this page."}
-            </Container>
-          </PageBand>
-        </>
+        <PageBand tone="faq">
+          <Container className="max-w-3xl text-sm text-red-600">
+            {error || "Something went wrong while loading this page."}
+          </Container>
+        </PageBand>
       ) : (
-        <>
-          <PageHero
-            kicker={kicker}
-            title={page.title}
-            subtitle={page.excerpt}
-            breadcrumbs={[{ label: "Home", href: "/" }, { label: page.title }]}
-          >
-            {children}
-          </PageHero>
-          <PageBand tone="faq">
-            <Container className="max-w-3xl space-y-6">
-              {page.content?.trim()
-                ? renderCmsBody(page.content)
-                : (
-                  <p className="text-sm text-muted-foreground">
-                    Content will appear here once published.
-                  </p>
-                )}
-            </Container>
-          </PageBand>
-        </>
+        <PageBand tone="faq">
+          <Container className="max-w-3xl space-y-6">
+            {page.content?.trim() ? (
+              renderCmsBody(page.content)
+            ) : (
+              <p className="text-sm text-muted-foreground">Content will appear here once published.</p>
+            )}
+          </Container>
+        </PageBand>
       )}
 
       <SiteFooter />

@@ -5,6 +5,18 @@ import { Plus, Pencil, Trash2, RefreshCw, Search } from "lucide-react";
 import type { FieldConfig } from "@/lib/admin/resources";
 import { RESOURCES } from "@/lib/admin/resources";
 import { adminFetch, formatCell, resourceApiPath } from "@/lib/admin/client";
+import {
+  adminPageClass,
+  adminFilterBarClass,
+  AdminPageHeader,
+  AdminDesktopTable,
+  AdminMobileList,
+  AdminMobileCard,
+  AdminMobileRow,
+  AdminMobileActions,
+  AdminLoadingState,
+  AdminEmptyState,
+} from "@/components/admin/admin-layout";
 import { cn } from "@/lib/utils";
 
 type Row = Record<string, unknown>;
@@ -117,35 +129,35 @@ export function ResourcePage({
   const filtered = useMemo(() => items, [items]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold text-ink">{config.label}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Manage {config.label.toLowerCase()} via API</p>
-        </div>
-        {!config.readOnly && (
-          <button
-            onClick={openCreate}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-95"
-          >
-            <Plus className="h-4 w-4" /> Add {config.singular}
-          </button>
-        )}
-      </div>
+    <div className={adminPageClass}>
+      <AdminPageHeader
+        title={config.label}
+        description={`Manage ${config.label.toLowerCase()} via API`}
+        actions={
+          !config.readOnly ? (
+            <button
+              onClick={openCreate}
+              className="inline-flex w-full flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-95 sm:w-auto sm:flex-none"
+            >
+              <Plus className="h-4 w-4" /> Add {config.singular}
+            </button>
+          ) : undefined
+        }
+      />
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="flex flex-1 items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
-          <Search className="h-4 w-4 text-muted-foreground" />
+      <div className={cn("rounded-2xl border border-border bg-card p-4", adminFilterBarClass)}>
+        <div className="relative min-w-0 flex-1 sm:min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={`Search ${config.label.toLowerCase()}...`}
-            className="flex-1 bg-transparent text-sm outline-none"
+            className="w-full rounded-lg border border-border bg-background py-2.5 pl-10 pr-4 text-sm outline-none"
           />
         </div>
         <button
           onClick={load}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:border-primary hover:text-primary"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-semibold hover:border-primary hover:text-primary sm:w-auto"
         >
           <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} /> Refresh
         </button>
@@ -157,7 +169,7 @@ export function ResourcePage({
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+      <AdminDesktopTable>
         <table className="min-w-full text-left text-sm">
           <thead className="border-b border-border bg-background/40 text-xs uppercase tracking-wider text-muted-foreground">
             <tr>
@@ -213,7 +225,48 @@ export function ResourcePage({
             )}
           </tbody>
         </table>
-      </div>
+      </AdminDesktopTable>
+
+      <AdminMobileList>
+        {loading ? (
+          <AdminLoadingState message="Loading..." />
+        ) : filtered.length === 0 ? (
+          <AdminEmptyState message="No records found" />
+        ) : (
+          filtered.map((row) => (
+            <AdminMobileCard key={String(row.id)}>
+              {config.columns.slice(0, 2).map((col) => (
+                <div key={col.key} className={col.key === config.columns[0]?.key ? undefined : "mt-2 border-t border-border/60 pt-2"}>
+                  {col.key === config.columns[0]?.key ? (
+                    <p className="font-semibold text-ink">{formatCell(row[col.key])}</p>
+                  ) : (
+                    <AdminMobileRow label={col.label}>{formatCell(row[col.key])}</AdminMobileRow>
+                  )}
+                </div>
+              ))}
+              {config.columns.slice(2).map((col) => (
+                <AdminMobileRow key={col.key} label={col.label}>{formatCell(row[col.key])}</AdminMobileRow>
+              ))}
+              {!config.readOnly && (
+                <AdminMobileActions>
+                  <button
+                    onClick={() => openEdit(row)}
+                    className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold"
+                  >
+                    <Pencil className="h-3.5 w-3.5" /> Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(row)}
+                    className="inline-flex items-center justify-center rounded-lg border border-rose-500/30 px-3 py-2 text-xs font-semibold text-rose-400"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </AdminMobileActions>
+              )}
+            </AdminMobileCard>
+          ))
+        )}
+      </AdminMobileList>
 
       {modalOpen && (
         <div className="fixed inset-0 z-[60] grid place-items-center bg-black/60 p-4">

@@ -6,6 +6,7 @@ export default function StudentAccountPage() {
       backHref="/dashboard"
       backLabel="Back to Dashboard"
       nextPath="/dashboard/account"
+      embedded
     />
   );
 }

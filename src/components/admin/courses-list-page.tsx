@@ -27,6 +27,21 @@ import type {
   CourseStats,
   Instructor,
 } from "@/lib/admin/types";
+import {
+  adminPageClass,
+  adminKpiGridClass,
+  adminFilterBarClass,
+  adminFilterSelectClass,
+  AdminPageHeader,
+  AdminDesktopTable,
+  AdminMobileList,
+  AdminMobileCard,
+  AdminMobileRow,
+  AdminMobileActions,
+  AdminLoadingState,
+  AdminEmptyState,
+  adminTabBarClass,
+} from "@/components/admin/admin-layout";
 import { cn } from "@/lib/utils";
 
 const STATUS_OPTIONS = [
@@ -155,23 +170,23 @@ export function CoursesListPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold text-ink">Course Management</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Create courses with curriculum, lessons, quizzes & live classes</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={exportCsv} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
-            <Download className="h-4 w-4" /> Export
-          </button>
-          <Link href="/admin/courses/new" className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-            <Plus className="h-4 w-4" /> Create Course
-          </Link>
-        </div>
-      </div>
+    <div className={adminPageClass}>
+      <AdminPageHeader
+        title="Course Management"
+        description="Create courses with curriculum, lessons, quizzes & live classes"
+        actions={
+          <>
+            <button type="button" onClick={exportCsv} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold sm:flex-none">
+              <Download className="h-4 w-4" /> Export
+            </button>
+            <Link href="/admin/courses/new" className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground sm:flex-none">
+              <Plus className="h-4 w-4" /> Create Course
+            </Link>
+          </>
+        }
+      />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className={adminKpiGridClass}>
         {kpis.map((k) => (
           <div key={k.label} className="rounded-2xl border border-border bg-card p-4">
             <div className="flex items-center justify-between">
@@ -194,18 +209,18 @@ export function CoursesListPage() {
         <strong>Publish</strong> → students enroll at <Link href="/courses" className="font-semibold text-primary underline">/courses</Link>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 lg:flex-row lg:flex-wrap lg:items-center">
-        <div className="relative min-w-[200px] flex-1">
+      <div className={cn("rounded-2xl border border-border bg-card p-4", adminFilterBarClass)}>
+        <div className="relative min-w-0 flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search courses..." className="w-full rounded-lg border border-border bg-background py-2.5 pl-10 pr-4 text-sm" />
         </div>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2.5 text-sm">
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={adminFilterSelectClass}>
           {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-        <select value={modeFilter} onChange={(e) => setModeFilter(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2.5 text-sm">
+        <select value={modeFilter} onChange={(e) => setModeFilter(e.target.value)} className={adminFilterSelectClass}>
           {MODE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-        <select value={instructorFilter} onChange={(e) => setInstructorFilter(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2.5 text-sm">
+        <select value={instructorFilter} onChange={(e) => setInstructorFilter(e.target.value)} className={adminFilterSelectClass}>
           <option value="">All Instructors</option>
           {instructors.map((i) => <option key={i.id} value={i.id}>{i.name}</option>)}
         </select>
@@ -216,7 +231,7 @@ export function CoursesListPage() {
 
       {error && <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
 
-      <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+      <AdminDesktopTable>
         <table className="w-full min-w-[1000px] text-left text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/40 text-xs uppercase text-muted-foreground">
@@ -287,7 +302,57 @@ export function CoursesListPage() {
             )}
           </tbody>
         </table>
-      </div>
+      </AdminDesktopTable>
+
+      <AdminMobileList>
+        {loading ? (
+          <AdminLoadingState message="Loading..." />
+        ) : items.length === 0 ? (
+          <AdminEmptyState message="No courses yet" />
+        ) : (
+          items.map((row) => (
+            <AdminMobileCard key={row.id}>
+              <div>
+                <p className="font-semibold text-ink">{row.title}</p>
+                <p className="text-xs text-muted-foreground capitalize">{row.mode} · {row.level} · {row.duration}</p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize", statusBadge(row.status))}>{row.status}</span>
+                </div>
+              </div>
+              <AdminMobileRow label="Instructor">{row.instructorName}</AdminMobileRow>
+              <AdminMobileRow label="Category">{categoryMap.get(row.categoryId) ?? "—"}</AdminMobileRow>
+              <AdminMobileRow label="Content">
+                {row.sectionCount} sections · {row.lessonCount} lessons
+                {row.liveClassCount > 0 ? ` · ${row.liveClassCount} live` : ""}
+                {row.hasFinalExam ? " · Exam" : ""}
+              </AdminMobileRow>
+              <AdminMobileRow label="Price">
+                <span className="font-semibold text-primary">₹{row.sellingPrice}</span>
+                {row.originalPrice > row.sellingPrice && (
+                  <span className="ml-1 text-[10px] text-forest">{discountPercent(row.originalPrice, row.sellingPrice)}% off</span>
+                )}
+              </AdminMobileRow>
+              <AdminMobileRow label="Enrolled">{row.activeEnrollments}</AdminMobileRow>
+              <AdminMobileActions>
+                <button type="button" onClick={() => openDetail(row)} className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Eye className="h-3.5 w-3.5" /> View
+                </button>
+                <Link href={`/admin/courses/${row.id}/edit`} className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Pencil className="h-3.5 w-3.5" /> Edit
+                </Link>
+                {row.status !== "published" && (
+                  <button type="button" onClick={() => setStatus(row.id, "published")} className="inline-flex items-center justify-center rounded-lg border border-emerald-200 px-3 py-2 text-xs font-semibold text-emerald-700">
+                    Publish
+                  </button>
+                )}
+                <button type="button" onClick={() => remove(row)} className="inline-flex items-center justify-center rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </AdminMobileActions>
+            </AdminMobileCard>
+          ))
+        )}
+      </AdminMobileList>
 
       {detail && (
         <div className="fixed inset-0 z-50 flex justify-end bg-black/50" onClick={() => setDetail(null)}>

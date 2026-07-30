@@ -20,6 +20,21 @@ import {
 } from "lucide-react";
 import { adminFetch, formatDate } from "@/lib/admin/client";
 import type { Instructor, InstructorDetailPayload, InstructorInput, InstructorStats } from "@/lib/admin/types";
+import {
+  adminPageClass,
+  adminKpiGridClass,
+  adminFilterBarClass,
+  adminFilterSelectClass,
+  AdminPageHeader,
+  AdminDesktopTable,
+  AdminMobileList,
+  AdminMobileCard,
+  AdminMobileRow,
+  AdminMobileActions,
+  AdminLoadingState,
+  AdminEmptyState,
+  adminTabBarClass,
+} from "@/components/admin/admin-layout";
 import { cn } from "@/lib/utils";
 
 const STATUS_OPTIONS = [
@@ -179,25 +194,23 @@ export function InstructorsPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold text-ink">Instructor Management</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Manage instructors, link user accounts & assign courses
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={exportCsv} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">
-            <Download className="h-4 w-4" /> Export
-          </button>
-          <button type="button" onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-            <Plus className="h-4 w-4" /> Add Instructor
-          </button>
-        </div>
-      </div>
+    <div className={adminPageClass}>
+      <AdminPageHeader
+        title="Instructor Management"
+        description="Manage instructors, link user accounts & assign courses"
+        actions={
+          <>
+            <button type="button" onClick={exportCsv} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold sm:flex-none">
+              <Download className="h-4 w-4" /> Export
+            </button>
+            <button type="button" onClick={openCreate} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground sm:flex-none">
+              <Plus className="h-4 w-4" /> Add Instructor
+            </button>
+          </>
+        }
+      />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className={adminKpiGridClass}>
         {kpis.map((k) => (
           <div key={k.label} className="rounded-2xl border border-border bg-card p-4">
             <div className="flex items-center justify-between">
@@ -215,8 +228,8 @@ export function InstructorsPage() {
         <Link href="/instructor-dashboard" className="font-semibold underline">Instructor Dashboard</Link>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
+      <div className={cn("rounded-2xl border border-border bg-card p-4", adminFilterBarClass)}>
+        <div className="relative min-w-0 flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             value={search}
@@ -225,7 +238,7 @@ export function InstructorsPage() {
             className="w-full rounded-lg border border-border bg-background py-2.5 pl-10 pr-4 text-sm"
           />
         </div>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2.5 text-sm">
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={adminFilterSelectClass}>
           {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         <button type="button" onClick={load} className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2.5 text-sm font-semibold">
@@ -235,7 +248,7 @@ export function InstructorsPage() {
 
       {error && <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
 
-      <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+      <AdminDesktopTable>
         <table className="w-full min-w-[900px] text-left text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/40 text-xs uppercase text-muted-foreground">
@@ -289,7 +302,49 @@ export function InstructorsPage() {
             )}
           </tbody>
         </table>
-      </div>
+      </AdminDesktopTable>
+
+      <AdminMobileList>
+        {loading ? (
+          <AdminLoadingState message="Loading..." />
+        ) : items.length === 0 ? (
+          <AdminEmptyState message="No instructors yet" />
+        ) : (
+          items.map((row) => (
+            <AdminMobileCard key={row.id}>
+              <div className="flex items-start gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gold/20 text-xs font-bold text-maroon">
+                  {initials(row.name)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-ink">{row.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{row.email}</p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize", statusBadge(row.status))}>{row.status}</span>
+                  </div>
+                </div>
+              </div>
+              <AdminMobileRow label="Expertise">{row.expertise}</AdminMobileRow>
+              <AdminMobileRow label="Courses">{row.courses}</AdminMobileRow>
+              <AdminMobileRow label="Students">{row.students}</AdminMobileRow>
+              <AdminMobileRow label="Rating">
+                <span className="inline-flex items-center gap-1"><Star className="h-3.5 w-3.5 fill-gold text-gold" />{row.rating || "—"}</span>
+              </AdminMobileRow>
+              <AdminMobileActions>
+                <button type="button" onClick={() => openDetail(row)} className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Eye className="h-3.5 w-3.5" /> View
+                </button>
+                <button type="button" onClick={() => openEdit(row)} className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold">
+                  <Pencil className="h-3.5 w-3.5" /> Edit
+                </button>
+                <button type="button" onClick={() => remove(row)} className="inline-flex items-center justify-center rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </AdminMobileActions>
+            </AdminMobileCard>
+          ))
+        )}
+      </AdminMobileList>
 
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setModalOpen(false)}>

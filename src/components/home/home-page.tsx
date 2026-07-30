@@ -15,12 +15,13 @@ import type {
   Testimonial,
 } from "@/lib/admin/types";
 import { DEFAULT_HOME_CMS } from "@/lib/certificate-settings";
+import { cn } from "@/lib/utils";
 import { PublicCourseCard } from "@/components/course/public-course-card";
 import { PublicInstructorCard } from "@/components/course/public-instructor-card";
 import { useEffect, useState } from "react";
 import {
   Sparkles, Facebook, Instagram, Twitter, Youtube, Linkedin,
-  Search, ChevronDown, Menu, X, ArrowRight, Play, Star, Award, GraduationCap,
+  Search, ChevronDown, ArrowRight, Play, Star, Award, GraduationCap,
   Code2, Palette, BarChart3, Briefcase, Smartphone, Database, Megaphone,
   Users, BookOpen, Clock, Heart, ShoppingCart, Video, FileText, FolderKanban,
   Rocket, ShieldCheck, Infinity as InfinityIcon, MessageCircle, Quote,
@@ -41,6 +42,144 @@ const categoryIcons = [
 
 function count(value: number) {
   return value >= 1000 ? `${(value / 1000).toFixed(1).replace(".0", "")}K+` : `${value}+`;
+}
+
+const PLACEHOLDER_STATS: HomePagePayload["stats"] = {
+  students: 0,
+  instructors: 0,
+  courses: 0,
+  certificates: 0,
+};
+
+function Skeleton({ className }: { className?: string }) {
+  return <div className={cn("animate-pulse rounded-lg bg-muted/70", className)} />;
+}
+
+function SectionHeadingSkeleton() {
+  return (
+    <div>
+      <Skeleton className="h-8 w-56" />
+      <Skeleton className="mt-2 h-4 w-72 max-w-full" />
+    </div>
+  );
+}
+
+function HomeCoursesSkeleton() {
+  return (
+    <section className="bg-home-courses py-12 md:py-16">
+      <Container>
+        <SectionHeadingSkeleton />
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-72 rounded-xl" />
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function HomeCategoriesSkeleton() {
+  return (
+    <section className="bg-home-categories py-12 md:py-16 lg:py-20">
+      <Container>
+        <SectionHeadingSkeleton />
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-5 lg:grid-cols-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-36 rounded-xl" />
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function HomeLiveClassesSkeleton() {
+  return (
+    <section className="bg-home-live py-12 md:py-16 lg:py-20">
+      <Container>
+        <div className="grid gap-8 rounded-2xl border border-border/50 bg-card/70 p-5 sm:rounded-3xl sm:p-8 lg:grid-cols-[1fr_2fr] lg:p-14">
+          <div className="space-y-4 self-center">
+            <Skeleton className="h-6 w-20 rounded-full" />
+            <Skeleton className="h-10 w-full max-w-xs" />
+            <Skeleton className="h-4 w-full max-w-sm" />
+            <Skeleton className="h-11 w-40 rounded-lg" />
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="h-64 rounded-2xl" />
+            ))}
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function HomeInstructorsSkeleton() {
+  return (
+    <section className="bg-home-instructors py-12 md:py-16 lg:py-20">
+      <Container>
+        <SectionHeadingSkeleton />
+        <div className="mx-auto mt-8 grid max-w-5xl grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-80 rounded-2xl" />
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function HomeTestimonialsSkeleton() {
+  return (
+    <section className="bg-home-testimonials py-12 md:py-16 lg:py-20">
+      <Container>
+        <div className="mx-auto max-w-2xl text-center">
+          <Skeleton className="mx-auto h-8 w-64" />
+          <Skeleton className="mx-auto mt-2 h-4 w-80 max-w-full" />
+        </div>
+        <div className="mt-8 flex gap-4 overflow-hidden sm:mt-10">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-44 w-80 shrink-0 rounded-2xl" />
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function HomeBlogSkeleton() {
+  return (
+    <section className="bg-home-blog py-12 md:py-16 lg:py-20">
+      <Container>
+        <SectionHeadingSkeleton />
+        <div className="mt-8 grid grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-80 rounded-2xl" />
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function HomeFaqSkeleton() {
+  return (
+    <section className="bg-home-faq py-12 md:py-16 lg:py-20">
+      <Container>
+        <div className="mx-auto max-w-2xl text-center">
+          <Skeleton className="mx-auto h-8 w-48" />
+          <Skeleton className="mx-auto mt-2 h-4 w-72 max-w-full" />
+        </div>
+        <div className="mx-auto mt-8 max-w-3xl space-y-3 sm:mt-10">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-16 rounded-xl" />
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
 }
 
 function formatDate(iso: string) {
@@ -85,9 +224,11 @@ const SectionTitle = ({ title, subtitle, align = "center" }: { title: React.Reac
 const Hero = ({
   stats,
   cms,
+  statsLoading = false,
 }: {
   stats: HomePagePayload["stats"];
   cms?: HomeCmsContent;
+  statsLoading?: boolean;
 }) => {
   const hero = cms ?? DEFAULT_HOME_CMS;
 
@@ -98,79 +239,89 @@ const Hero = ({
       <img
         src={images.heroBanner}
         alt="Student at Navbharat Gurukulam"
-        className="absolute inset-0 h-full w-full object-cover object-[70%_center] sm:object-center"
+        className="absolute inset-0 h-full w-full object-cover object-[75%_center] sm:object-[70%_center] md:object-center"
       />
       {/* strengthen the cream on the left so the headline stays readable */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.97_0.02_60)] from-25% via-[oklch(0.97_0.02_60)/0.6] via-50% to-transparent to-80%" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.97_0.02_60)] from-0% via-[oklch(0.97_0.02_60)/0.85] via-45% to-transparent to-90% sm:from-25% sm:via-50% sm:to-80%" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent sm:from-background/85 sm:via-transparent" />
     </div>
 
     {/* Top-right official crest logo */}
-    <div className="absolute right-4 top-5 z-20 hidden sm:right-8 sm:top-8 md:block">
+    <div className="absolute right-3 top-4 z-20 sm:right-6 sm:top-6 md:right-8 md:top-8">
       <img
         src={images.logo}
         alt="Navbharat Gurukulam crest"
-        className="h-20 w-20 rounded-full object-cover drop-shadow-lg lg:h-24 lg:w-24"
+        className="h-14 w-14 rounded-full object-cover drop-shadow-lg sm:h-16 sm:w-16 md:h-20 md:w-20 lg:h-24 lg:w-24"
       />
     </div>
 
-    <Container className="relative z-10 flex min-h-[500px] items-center py-16 sm:min-h-[560px] lg:min-h-[600px] lg:py-20">
-      <div className="min-w-0 max-w-xl">
-        <span className="inline-flex items-center gap-2 rounded-full bg-maroon/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-maroon">
-          <Sparkles className="h-3 w-3" /> {hero.heroKicker}
+    <Container className="relative z-10 flex min-h-[420px] items-center py-10 sm:min-h-[500px] sm:py-14 md:min-h-[560px] lg:min-h-[600px] lg:py-20">
+      <div className="min-w-0 max-w-xl pr-16 sm:pr-20 md:pr-0">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-maroon/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-maroon sm:gap-2 sm:px-3 sm:py-1.5 sm:text-[11px]">
+          <Sparkles className="h-3 w-3 shrink-0" /> {hero.heroKicker}
         </span>
-        <h1 className="mt-5 text-4xl font-extrabold leading-[1.1] tracking-tight text-ink sm:text-5xl lg:text-[56px]">
+        <h1 className="mt-4 text-[1.75rem] font-extrabold leading-[1.12] tracking-tight text-ink sm:mt-5 sm:text-4xl sm:leading-[1.1] md:text-5xl lg:text-[56px]">
           {hero.heroTitleLine1}<br />
-          through <span className="text-maroon">{hero.heroHighlight1}</span><br />
+          through <span className="text-maroon">{hero.heroHighlight1}</span><br className="hidden sm:block" />
+          <span className="sm:hidden"> </span>
           {hero.heroTitleLine2} <span className="text-maroon">{hero.heroHighlight2}</span>
         </h1>
-        <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
+        <p className="mt-4 max-w-md text-[13px] leading-relaxed text-muted-foreground sm:mt-5 sm:text-sm md:text-base">
           {hero.heroSubtitle}
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a href={hero.primaryCtaHref || "/courses"} className="inline-flex items-center gap-2 rounded-lg bg-maroon px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:opacity-95">
+        <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-3">
+          <a href={hero.primaryCtaHref || "/courses"} className="inline-flex items-center justify-center gap-2 rounded-lg bg-maroon px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:opacity-95 sm:justify-start sm:px-6 sm:py-3.5">
             {hero.primaryCtaLabel || "Explore Courses"} <ArrowRight className="h-4 w-4" />
           </a>
-          <a href={hero.secondaryCtaHref || "/about"} className="inline-flex items-center gap-2 rounded-lg border border-border bg-card/90 px-6 py-3.5 text-sm font-bold text-ink backdrop-blur-sm transition hover:border-maroon/40">
-            <PlayCircle className="h-4 w-4 text-maroon" /> {hero.secondaryCtaLabel || "Learn More"} <ChevronDown className="h-4 w-4" />
+          <a href={hero.secondaryCtaHref || "/about"} className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card/90 px-5 py-3 text-sm font-bold text-ink backdrop-blur-sm transition hover:border-maroon/40 sm:justify-start sm:px-6 sm:py-3.5">
+            <PlayCircle className="h-4 w-4 shrink-0 text-maroon" /> {hero.secondaryCtaLabel || "Learn More"} <ChevronDown className="hidden h-4 w-4 sm:block" />
           </a>
         </div>
       </div>
     </Container>
 
     {/* Floating pill search bar overlapping the bottom edge */}
-    <Container className="relative z-20 -mb-8 translate-y-8">
-      <form className="mx-auto flex max-w-4xl flex-col gap-2 rounded-2xl border border-border bg-card p-2 shadow-float sm:flex-row sm:items-center sm:rounded-full sm:p-2 sm:pl-6">
-        <div className="flex items-center gap-2 border-b border-border px-3 py-2 sm:border-b-0 sm:border-r sm:py-1 sm:pr-5">
-          <span className="whitespace-nowrap text-sm font-semibold text-ink">All Categories</span>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+    <Container className="relative z-20">
+      <form className="mx-auto flex max-w-4xl flex-col gap-2 rounded-2xl border border-border bg-card p-2 shadow-float sm:flex-row sm:items-center sm:rounded-full sm:p-2 sm:pl-6 md:-mb-8 md:translate-y-8">
+        <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2 sm:justify-start sm:border-b-0 sm:border-r sm:py-1 sm:pr-5">
+          <span className="truncate text-sm font-semibold text-ink">All Categories</span>
+          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
         </div>
         <div className="flex min-w-0 flex-1 items-center gap-2 px-2 sm:px-4">
           <input placeholder="Search for courses, programs, research." className="min-w-0 flex-1 bg-transparent py-2.5 text-sm text-ink outline-none placeholder:text-muted-foreground" />
         </div>
-        <button type="button" className="inline-flex items-center justify-center gap-2 rounded-xl bg-maroon px-7 py-3 text-sm font-bold text-white transition hover:opacity-95 sm:rounded-full">
+        <button type="button" className="inline-flex items-center justify-center gap-2 rounded-xl bg-maroon px-5 py-3 text-sm font-bold text-white transition hover:opacity-95 sm:rounded-full sm:px-7">
           <Search className="h-4 w-4" /> Search
         </button>
       </form>
     </Container>
 
     {/* Stats strip */}
-    <div className="border-b border-border bg-card pt-8">
-      <Container className="grid grid-cols-2 gap-4 py-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-border">
+    <div className="mt-6 border-b border-border bg-card pt-4 sm:mt-0 sm:pt-6 md:pt-8">
+      <Container className="grid grid-cols-2 gap-x-4 gap-y-5 py-5 sm:gap-4 sm:py-6 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-border">
         {[
           { i: Users, v: count(stats.students), l: "Students Enrolled", c: "text-primary" },
           { i: GraduationCap, v: count(stats.instructors), l: "Expert Instructors", c: "text-maroon" },
           { i: BookOpen, v: count(stats.courses), l: "Courses & Programs", c: "text-primary" },
           { i: Award, v: count(stats.certificates), l: "Certificates Issued", c: "text-maroon" },
         ].map(({ i: Icon, v, l, c }) => (
-          <div key={l} className="flex items-center gap-3 px-2 lg:px-6">
-            <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full bg-muted ${c}`}>
+          <div key={l} className="flex items-center gap-2.5 px-1 sm:gap-3 sm:px-2 lg:px-6">
+            <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full bg-muted sm:h-10 sm:w-10 ${c}`}>
               <Icon className="h-4 w-4" />
             </span>
             <div className="min-w-0">
-              <p className="text-lg font-extrabold text-ink sm:text-xl">{v}</p>
-              <p className="text-[11px] leading-tight text-muted-foreground">{l}</p>
+              {statsLoading ? (
+                <>
+                  <Skeleton className="h-6 w-14 sm:h-7 md:h-8" />
+                  <Skeleton className="mt-1.5 h-3 w-24" />
+                </>
+              ) : (
+                <>
+                  <p className="text-base font-extrabold text-ink sm:text-lg md:text-xl">{v}</p>
+                  <p className="text-[10px] leading-tight text-muted-foreground sm:text-[11px]">{l}</p>
+                </>
+              )}
             </div>
           </div>
         ))}
@@ -646,10 +797,11 @@ export default function HomePage() {
         const payload = await response.json();
         if (!payload.success) throw new Error("Could not load home page");
         setData(payload.data);
+        setError("");
       })
       .catch((requestError) => {
         if (requestError.name !== "AbortError") {
-          setError("Home page content could not be loaded. Please refresh and try again.");
+          setError("Some sections could not be loaded. Please refresh to try again.");
         }
       })
       .finally(() => {
@@ -658,49 +810,50 @@ export default function HomePage() {
     return () => controller.abort();
   }, []);
 
-  if (loading) {
-    return (
-      <main className="overflow-x-hidden bg-background pb-20 text-foreground sm:pb-0">
-        <SiteTopBar />
-        <SiteHeader />
-        <div className="flex min-h-[60vh] items-center justify-center">
-          <div className="text-center">
-            <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-            <p className="mt-4 text-sm text-muted-foreground">Loading home page…</p>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  if (!data) {
-    return (
-      <main className="overflow-x-hidden bg-background pb-20 text-foreground sm:pb-0">
-        <SiteTopBar />
-        <SiteHeader />
-        <div className="flex min-h-[60vh] items-center justify-center">
-          <p className="text-sm text-muted-foreground">{error || "Unable to load home page content."}</p>
-        </div>
-      </main>
-    );
-  }
+  const ready = !loading && !!data;
 
   return (
     <main className="overflow-x-hidden bg-background pb-20 text-foreground sm:pb-0">
       <SiteTopBar />
       <SiteHeader />
-      <Hero stats={data.stats} cms={data.cms} />
+      <Hero
+        stats={data?.stats ?? PLACEHOLDER_STATS}
+        cms={data?.cms ?? DEFAULT_HOME_CMS}
+        statsLoading={loading}
+      />
+      {error && !ready ? (
+        <div className="border-b border-destructive/20 bg-destructive/5 py-3 text-center text-sm text-destructive">
+          {error}
+        </div>
+      ) : null}
       <TrustedBy />
-      <PopularCourses featuredCourses={data.featuredCourses} />
-      <WhyUs />
-      <Categories categories={data.categories} />
-      <Process />
-      <LiveClasses liveClasses={data.liveClasses} />
-      <Instructors instructors={data.instructors} />
-      <Testimonials testimonials={data.testimonials} />
-      <MobileApp />
-      <Blog blogs={data.blogs} />
-      <FAQ faqs={data.faqs} />
+      {ready ? (
+        <>
+          <PopularCourses featuredCourses={data.featuredCourses} />
+          <WhyUs />
+          <Categories categories={data.categories} />
+          <Process />
+          <LiveClasses liveClasses={data.liveClasses} />
+          <Instructors instructors={data.instructors} />
+          <Testimonials testimonials={data.testimonials} />
+          <MobileApp />
+          <Blog blogs={data.blogs} />
+          <FAQ faqs={data.faqs} />
+        </>
+      ) : (
+        <>
+          <HomeCoursesSkeleton />
+          <WhyUs />
+          <HomeCategoriesSkeleton />
+          <Process />
+          <HomeLiveClassesSkeleton />
+          <HomeInstructorsSkeleton />
+          <HomeTestimonialsSkeleton />
+          <MobileApp />
+          <HomeBlogSkeleton />
+          <HomeFaqSkeleton />
+        </>
+      )}
       <SiteFooter />
       <a href="#" aria-label="WhatsApp" className="fixed bottom-4 right-4 z-50 grid h-12 w-12 place-items-center rounded-full bg-primary text-white shadow-float hover:scale-105 sm:bottom-6 sm:right-6 sm:h-14 sm:w-14">
         <MessageCircle className="h-6 w-6" />

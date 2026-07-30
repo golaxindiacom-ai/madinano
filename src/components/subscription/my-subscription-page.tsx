@@ -3,10 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, CheckCircle2, Crown, Repeat, Ban } from "lucide-react";
-import { SiteHeader, SiteTopBar } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { Container } from "@/components/ui/container";
+import { CheckCircle2, Crown, Repeat, Ban } from "lucide-react";
 import { syncSessionFromServer } from "@/lib/exam/student-session";
 import type { StudentSubscriptionItem, SubscriptionListItem } from "@/lib/admin/types";
 import { cn } from "@/lib/utils";
@@ -83,96 +80,114 @@ export function MySubscriptionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <SiteTopBar />
-      <SiteHeader />
-      <Container className="py-10">
-        <Link href="/dashboard" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
-          <ArrowLeft className="h-4 w-4" /> Back to Dashboard
-        </Link>
+    <>
+      <h1 className="text-xl font-extrabold text-ink sm:text-2xl">My Subscription</h1>
+      <p className="mt-1 text-sm text-muted-foreground">Manage your premium plan</p>
 
-        <h1 className="text-2xl font-extrabold text-ink">My Subscription</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Manage your premium plan</p>
+      {success ? (
+        <div className="mt-6 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          <CheckCircle2 className="h-5 w-5 shrink-0" /> Subscription activated successfully!
+        </div>
+      ) : null}
 
-        {success && (
-          <div className="mt-6 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-            <CheckCircle2 className="h-5 w-5" /> Subscription activated successfully!
+      {loading ? (
+        <p className="mt-8 text-muted-foreground">Loading...</p>
+      ) : active ? (
+        <div className="mt-6 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 to-gold/5 p-4 sm:mt-8 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground">
+                <Crown className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-widest text-primary">Current Plan</p>
+                <h2 className="text-lg font-extrabold text-ink sm:text-xl">{active.planLabel}</h2>
+                <p className="text-sm text-muted-foreground">₹{active.amount.toLocaleString("en-IN")}</p>
+              </div>
+            </div>
+            <span
+              className={cn(
+                "w-fit rounded-full px-2.5 py-1 text-[10px] font-bold uppercase",
+                statusBadge(active.status),
+              )}
+            >
+              {active.status}
+            </span>
           </div>
-        )}
+          <div className="mt-5 grid gap-3 text-sm sm:grid-cols-3">
+            <div className="rounded-lg border border-border bg-card/80 p-3">
+              <p className="text-muted-foreground">Started</p>
+              <p className="font-semibold">{new Date(active.startDate).toLocaleDateString("en-IN")}</p>
+            </div>
+            <div className="rounded-lg border border-border bg-card/80 p-3">
+              <p className="text-muted-foreground">{active.plan === "lifetime" ? "Access" : "Renews / Ends"}</p>
+              <p className="font-semibold">
+                {active.plan === "lifetime" ? "Forever" : new Date(active.endDate).toLocaleDateString("en-IN")}
+              </p>
+            </div>
+            <div className="rounded-lg border border-border bg-card/80 p-3">
+              <p className="text-muted-foreground">Days Remaining</p>
+              <p className="font-semibold">{active.plan === "lifetime" ? "∞" : `${active.daysRemaining} days`}</p>
+            </div>
+          </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            {active.autoRenew && active.plan !== "lifetime" ? (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Repeat className="h-3.5 w-3.5" /> Auto-renew enabled
+              </span>
+            ) : null}
+            {active.plan !== "lifetime" ? (
+              <button
+                type="button"
+                onClick={cancel}
+                disabled={cancelling}
+                className="inline-flex items-center gap-1 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60"
+              >
+                <Ban className="h-3.5 w-3.5" /> {cancelling ? "Cancelling..." : "Cancel Subscription"}
+              </button>
+            ) : null}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-8 rounded-2xl border border-dashed border-border p-8 text-center sm:p-10">
+          <Crown className="mx-auto h-10 w-10 text-muted-foreground" />
+          <p className="mt-3 font-semibold text-ink">No active subscription</p>
+          <p className="mt-1 text-sm text-muted-foreground">Upgrade to unlock all premium features</p>
+          <Link
+            href="/pricing"
+            className="mt-4 inline-block rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          >
+            View Plans
+          </Link>
+        </div>
+      )}
 
-        {loading ? (
-          <p className="mt-8 text-muted-foreground">Loading...</p>
-        ) : active ? (
-          <div className="mt-8 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 to-gold/5 p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground">
-                  <Crown className="h-6 w-6" />
-                </div>
+      {history.length > 0 ? (
+        <div className="mt-8 sm:mt-10">
+          <h3 className="font-bold text-ink">Subscription History</h3>
+          <div className="mt-4 space-y-2">
+            {history.map((s) => (
+              <div
+                key={s.id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm"
+              >
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-primary">Current Plan</p>
-                  <h2 className="text-xl font-extrabold text-ink">{active.planLabel}</h2>
-                  <p className="text-sm text-muted-foreground">₹{active.amount.toLocaleString("en-IN")}</p>
+                  <p className="font-semibold">{s.planLabel}</p>
+                  <p className="text-xs text-muted-foreground">₹{s.amount.toLocaleString("en-IN")}</p>
                 </div>
+                <span
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
+                    statusBadge(s.status),
+                  )}
+                >
+                  {s.status}
+                </span>
               </div>
-              <span className={cn("rounded-full px-2.5 py-1 text-[10px] font-bold uppercase", statusBadge(active.status))}>{active.status}</span>
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3 text-sm">
-              <div className="rounded-lg bg-card/80 p-3 border border-border">
-                <p className="text-muted-foreground">Started</p>
-                <p className="font-semibold">{new Date(active.startDate).toLocaleDateString("en-IN")}</p>
-              </div>
-              <div className="rounded-lg bg-card/80 p-3 border border-border">
-                <p className="text-muted-foreground">{active.plan === "lifetime" ? "Access" : "Renews / Ends"}</p>
-                <p className="font-semibold">
-                  {active.plan === "lifetime" ? "Forever" : new Date(active.endDate).toLocaleDateString("en-IN")}
-                </p>
-              </div>
-              <div className="rounded-lg bg-card/80 p-3 border border-border">
-                <p className="text-muted-foreground">Days Remaining</p>
-                <p className="font-semibold">{active.plan === "lifetime" ? "∞" : `${active.daysRemaining} days`}</p>
-              </div>
-            </div>
-            <div className="mt-5 flex flex-wrap gap-3">
-              {active.autoRenew && active.plan !== "lifetime" && (
-                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><Repeat className="h-3.5 w-3.5" /> Auto-renew enabled</span>
-              )}
-              {active.plan !== "lifetime" && (
-                <button type="button" onClick={cancel} disabled={cancelling} className="inline-flex items-center gap-1 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60">
-                  <Ban className="h-3.5 w-3.5" /> {cancelling ? "Cancelling..." : "Cancel Subscription"}
-                </button>
-              )}
-            </div>
+            ))}
           </div>
-        ) : (
-          <div className="mt-8 rounded-2xl border border-dashed border-border p-10 text-center">
-            <Crown className="mx-auto h-10 w-10 text-muted-foreground" />
-            <p className="mt-3 font-semibold text-ink">No active subscription</p>
-            <p className="mt-1 text-sm text-muted-foreground">Upgrade to unlock all premium features</p>
-            <Link href="/pricing" className="mt-4 inline-block rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">
-              View Plans
-            </Link>
-          </div>
-        )}
-
-        {history.length > 0 && (
-          <div className="mt-10">
-            <h3 className="font-bold text-ink">Subscription History</h3>
-            <div className="mt-4 space-y-2">
-              {history.map((s) => (
-                <div key={s.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm">
-                  <div>
-                    <p className="font-semibold">{s.planLabel}</p>
-                    <p className="text-xs text-muted-foreground">₹{s.amount.toLocaleString("en-IN")}</p>
-                  </div>
-                  <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase", statusBadge(s.status))}>{s.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </Container>
-      <SiteFooter />
-    </div>
+        </div>
+      ) : null}
+    </>
   );
 }

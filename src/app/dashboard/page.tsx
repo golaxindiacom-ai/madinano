@@ -1,34 +1,24 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ComponentType } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { DashboardCertificatesPanel } from "@/components/dashboard/dashboard-certificates-panel";
-import { getStudentSession, syncSessionFromServer } from "@/lib/exam/student-session";
-import { images } from "@/lib/images";
+import { syncSessionFromServer } from "@/lib/exam/student-session";
 import {
   AlertCircle,
   Award,
   BookOpen,
   CheckCircle2,
-  ChevronRight,
-  ClipboardList,
   Clock,
-  Crown,
   ExternalLink,
   FileText,
   GraduationCap,
-  Home,
   Play,
   Radio,
-  Receipt,
-  ShoppingCart,
   TrendingUp,
-  Trophy,
-  User,
   Video,
 } from "lucide-react";
-import { NotificationBell } from "@/components/notifications/notification-bell";
 
 type DashboardData = {
   student: { id: string; name: string; email: string };
@@ -66,30 +56,6 @@ type DashboardData = {
   } | null;
   certificates: number;
 };
-
-const sidebar = {
-  primary: [
-    { icon: Home, label: "Dashboard", href: "/dashboard", active: true },
-    { icon: Video, label: "Live Classes", href: "/live-classes", active: false },
-    { icon: ClipboardList, label: "Exams", href: "/exams", active: false },
-    { icon: User, label: "Account", href: "/dashboard/account", active: false },
-  ],
-  billing: [
-    { icon: Receipt, label: "Payment History", href: "/dashboard/payments", active: false },
-    { icon: ShoppingCart, label: "My Orders", href: "/dashboard/orders", active: false },
-    { icon: Crown, label: "My Subscription", href: "/dashboard/subscription", active: false },
-    { icon: BookOpen, label: "Pricing", href: "/pricing", active: false },
-  ],
-};
-
-function initials(name: string) {
-  return name
-    .split(" ")
-    .map((part) => part[0] ?? "")
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
 
 function firstName(name: string) {
   return name.split(" ")[0] || name;
@@ -214,99 +180,20 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="flex">
-        <aside className="sticky top-0 hidden h-screen w-[260px] shrink-0 flex-col border-r border-border bg-card/60 backdrop-blur lg:flex">
-          <Link href="/" className="flex items-center gap-2.5 border-b border-border px-6 py-5">
-            <img
-              src={images.logo}
-              alt="Navbharat Gurukulam"
-              className="h-11 w-11 shrink-0 rounded-full object-cover"
-            />
-            <span className="leading-tight">
-              <span className="block text-[15px] font-extrabold tracking-tight text-ink">
-                Navbharat <span className="text-primary">Gurukulam</span>
-              </span>
-              <span className="block text-[10px] font-medium text-muted-foreground">
-                Learn | Grow | Succeed
-              </span>
-            </span>
-          </Link>
+    <>
+      <div className="mb-6">
+        <h1 className="text-xl font-extrabold text-ink sm:text-2xl">
+          {student ? `Welcome back, ${firstName(student.name)}` : "Welcome back"}
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Track your courses, assignments, live learning, and certificates in one place.
+        </p>
+        {student?.email ? (
+          <p className="mt-2 text-xs text-muted-foreground sm:hidden">{student.email}</p>
+        ) : null}
+      </div>
 
-          <nav className="flex-1 space-y-6 overflow-y-auto px-4 py-5 text-sm">
-            <NavGroup title="Student" items={sidebar.primary} />
-            <NavGroup title="Billing" items={sidebar.billing} />
-          </nav>
-
-          <div className="mx-4 mb-4 rounded-2xl border border-maroon/20 bg-gradient-to-br from-maroon/15 to-gold/10 p-4 text-center">
-            <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-xl bg-maroon/10">
-              <Trophy className="h-6 w-6 text-gold" />
-            </div>
-            <div className="text-sm font-bold text-ink">Upgrade to Premium</div>
-            <p className="mt-1 text-[11px] text-muted-foreground">
-              Unlock unlimited courses, certificates and live classes.
-            </p>
-            <Link
-              href="/pricing"
-              className="mt-3 block w-full rounded-lg bg-maroon py-2 text-center text-xs font-semibold text-white hover:opacity-90"
-            >
-              Go Premium
-            </Link>
-          </div>
-
-          <Link href="/dashboard/account" className="flex items-center gap-3 border-t border-border px-4 py-4 hover:bg-muted/40">
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-maroon to-gold text-sm font-bold text-white">
-              {student ? initials(student.name) : "NG"}
-            </div>
-            <div className="flex-1">
-              <div className="text-sm font-semibold text-ink">{student?.name ?? "Loading student"}</div>
-              <div className="text-[11px] text-muted-foreground">Account & password</div>
-            </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </Link>
-        </aside>
-
-        <main className="min-w-0 flex-1">
-          <div className="border-b border-border bg-card/40 px-6 py-4 backdrop-blur">
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex-1">
-                <div className="text-xl font-extrabold text-ink">
-                  {student ? `Welcome back, ${firstName(student.name)}` : "Welcome back"}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  Track your courses, assignments, live learning, and certificates in one place.
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <NotificationBell buttonClassName="h-10 w-10 rounded-xl border border-border bg-background/50" />
-                <div className="rounded-xl border border-border bg-background/50 px-4 py-2 text-right">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    Signed in as
-                  </div>
-                  <div className="text-sm font-semibold text-ink">{student?.email ?? "Loading..."}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 flex flex-wrap gap-2 lg:hidden">
-              {[...sidebar.primary, ...sidebar.billing].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                    item.active
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border bg-background text-foreground/80"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-6">
-            {loading ? (
+      {loading ? (
               <div className="rounded-2xl border border-border bg-card p-5 text-sm text-muted-foreground">
                 Loading dashboard...
               </div>
@@ -567,19 +454,21 @@ export default function DashboardPage() {
                           {data.assignments.map((assignment) => (
                             <div
                               key={assignment.id}
-                              className="flex items-start gap-3 rounded-lg border border-border bg-background/40 p-3"
+                              className="flex flex-col gap-2 rounded-lg border border-border bg-background/40 p-3 sm:flex-row sm:items-start sm:gap-3"
                             >
-                              <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/15 text-primary">
-                                <FileText className="h-4 w-4" />
-                              </div>
-                              <div className="flex-1">
-                                <div className="text-xs font-semibold text-ink">{assignment.title}</div>
-                                <div className="text-[10px] text-muted-foreground">{assignment.courseTitle}</div>
-                                <div className="mt-1 inline-flex rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                  {assignment.status.replace(/_/g, " ")}
+                              <div className="flex items-start gap-3">
+                                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary/15 text-primary">
+                                  <FileText className="h-4 w-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-xs font-semibold text-ink">{assignment.title}</div>
+                                  <div className="text-[10px] text-muted-foreground">{assignment.courseTitle}</div>
+                                  <div className="mt-1 inline-flex rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                    {assignment.status.replace(/_/g, " ")}
+                                  </div>
                                 </div>
                               </div>
-                              <div className="text-right text-[10px] font-semibold text-amber-500">
+                              <div className="text-left text-[10px] font-semibold text-amber-500 sm:text-right">
                                 {formatDueDate(assignment.dueDate)}
                               </div>
                             </div>
@@ -591,59 +480,6 @@ export default function DashboardPage() {
                 </div>
               </>
             ) : null}
-          </div>
-        </main>
-      </div>
-    </div>
-  );
-}
-
-function NavItem({
-  icon: Icon,
-  label,
-  active,
-  href,
-}: {
-  icon: ComponentType<{ className?: string }>;
-  label: string;
-  active?: boolean;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-        active ? "bg-primary text-primary-foreground" : "text-foreground/80 hover:bg-muted"
-      }`}
-    >
-      <Icon className="h-4 w-4" />
-      <span className="flex-1">{label}</span>
-    </Link>
-  );
-}
-
-function NavGroup({
-  title,
-  items,
-}: {
-  title: string;
-  items: {
-    icon: ComponentType<{ className?: string }>;
-    label: string;
-    href: string;
-    active?: boolean;
-  }[];
-}) {
-  return (
-    <div>
-      <div className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-        {title}
-      </div>
-      <div className="space-y-1">
-        {items.map((item) => (
-          <NavItem key={item.href} {...item} />
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
