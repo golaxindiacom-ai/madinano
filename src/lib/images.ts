@@ -1,7 +1,7 @@
 export const images = {
   logo: "/images/madinano-logo.png",
   heroStudent: "/images/hero-student-new.jpg",
-  heroBanner: "/images/hero-navbharat.png",
+  heroBanner: "/images/hero-banner-education.jpg",
   crest: "/images/madinano-logo.png",
   courseWeb: "/images/course-webdev.jpg",
   courseData: "/images/course-datascience.jpg",

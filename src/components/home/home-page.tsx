@@ -234,12 +234,12 @@ const Hero = ({
 
   return (
   <section className="relative overflow-hidden">
-    {/* Full-bleed hero banner (student + faded monument + warm cream) */}
+    {/* Full-bleed hero banner (student in library + warm cream fade) */}
     <div className="absolute inset-0 bg-[oklch(0.97_0.02_60)]">
       <img
         src={images.heroBanner}
-        alt="Student at Madinano"
-        className="absolute inset-0 h-full w-full object-cover object-[75%_center] sm:object-[70%_center] md:object-center"
+        alt="Student learning at Madinano"
+        className="absolute inset-0 h-full w-full object-cover object-[80%_center] sm:object-[75%_center] md:object-[65%_center]"
       />
       {/* strengthen the cream on the left so the headline stays readable */}
       <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.97_0.02_60)] from-0% via-[oklch(0.97_0.02_60)/0.85] via-45% to-transparent to-90% sm:from-25% sm:via-50% sm:to-80%" />
