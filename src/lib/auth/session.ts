@@ -7,7 +7,7 @@ import {
 
 export { SESSION_COOKIE, signSessionToken, verifySessionTokenAsync };
 
-const SESSION_SECRET = process.env.AUTH_SECRET || "navbharat-dev-secret-change-in-production";
+const SESSION_SECRET = process.env.AUTH_SECRET || "madinano-dev-secret-change-in-production";
 
 /** Sync verify for Node API routes. */
 export function verifySessionToken(token: string | undefined | null): string | null {

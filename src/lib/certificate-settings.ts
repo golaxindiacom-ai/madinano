@@ -8,8 +8,8 @@ import type {
 } from "@/lib/admin/types";
 
 export const DEFAULT_CERTIFICATE_SETTINGS: CertificateSettings = {
-  organizationName: "Navbharat Gurukulam",
-  organizationSubtitle: "Research Foundation",
+  organizationName: "Madinano",
+  organizationSubtitle: "Global Pvt. Ltd.",
   director: {
     name: "Dr. A. K. Sharma",
     title: "Director",
@@ -37,13 +37,13 @@ export const DEFAULT_PAYMENT_GATEWAYS: PaymentGatewaysSettings = {
 };
 
 export const DEFAULT_HOME_CMS: HomeCmsContent = {
-  heroKicker: "Welcome to Navbharat Gurukulam",
+  heroKicker: "Welcome to Madinano",
   heroTitleLine1: "Building Nation",
   heroHighlight1: "Research",
   heroTitleLine2: "and",
   heroHighlight2: "Education",
   heroSubtitle:
-    "Navbharat Gurukulam Research Foundation empowers learners with research-led courses, expert mentors, and career-ready skills.",
+    "Madinano Global Pvt. Ltd. empowers learners with research-led courses, expert mentors, and career-ready skills.",
   primaryCtaLabel: "Explore Courses",
   primaryCtaHref: "/courses",
   secondaryCtaLabel: "Learn More",
@@ -62,8 +62,8 @@ export const DEFAULT_SITE_CMS: SiteCmsContent = {
 };
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
-  siteName: "Navbharat Gurukulam",
-  siteEmail: "support@navbharatgurukulam.com",
+  siteName: "Madinano",
+  siteEmail: "support@madinano.com",
   sitePhone: "+91 12345 67890",
   currency: "INR",
   timezone: "Asia/Kolkata",

@@ -39,7 +39,7 @@ export default function GalleryPage() {
       <PageHero
         kicker="Campus Life"
         title="Gallery"
-        subtitle="Moments from classrooms, events, and learner journeys at Navbharat Gurukulam."
+        subtitle="Moments from classrooms, events, and learner journeys at Madinano."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Gallery" }]}
       />
       <PageBand tone="blog">

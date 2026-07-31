@@ -1,4 +1,4 @@
-// Navbharat LMS — PostgreSQL schema (Prisma ORM)
+// Madinano LMS — PostgreSQL schema (Prisma ORM)
 
 generator client {
   provider = "prisma-client"

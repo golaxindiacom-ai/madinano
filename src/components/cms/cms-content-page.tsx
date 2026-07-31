@@ -25,11 +25,11 @@ const DEFAULT_PAGE_HERO: Record<string, { title: string; subtitle?: string }> = 
   },
   "privacy-policy": {
     title: "Privacy Policy",
-    subtitle: "How Navbharat Gurukulam collects, uses, and protects your information.",
+    subtitle: "How Madinano collects, uses, and protects your information.",
   },
   terms: {
     title: "Terms of Use",
-    subtitle: "Rules for using Navbharat Gurukulam courses, exams, and platform services.",
+    subtitle: "Rules for using Madinano courses, exams, and platform services.",
   },
 };
 
@@ -102,7 +102,7 @@ function renderCmsBody(content: string) {
 
 export function CmsContentPage({
   slug,
-  kicker = "Navbharat Gurukulam",
+  kicker = "Madinano",
   title: titleProp,
   subtitle: subtitleProp,
   initialPage,

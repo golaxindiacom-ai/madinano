@@ -15,7 +15,7 @@ type PageHeroProps = {
 };
 
 export function PageHero({
-  kicker = "Navbharat Gurukulam",
+  kicker = "Madinano",
   title,
   subtitle,
   breadcrumbs,

@@ -24,7 +24,7 @@ export async function downloadCertificatePdf(cert: Certificate) {
   doc.setFontSize(28);
   doc.setTextColor(30, 41, 59);
   doc.setFont("helvetica", "bold");
-  doc.text("Navbharat Gurukulam", w / 2, 48, { align: "center" });
+  doc.text("Madinano", w / 2, 48, { align: "center" });
 
   doc.setFontSize(12);
   doc.setFont("helvetica", "normal");

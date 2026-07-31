@@ -66,7 +66,7 @@ export default function SignupPage() {
             Create your <span className="text-primary">account</span>
           </>
         }
-        subtitle="Join Navbharat Gurukulam and start learning today."
+        subtitle="Join Madinano and start learning today."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Sign up" }]}
       />
       <PageBand tone="trusted">

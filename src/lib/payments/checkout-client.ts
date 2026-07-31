@@ -78,14 +78,14 @@ async function openRazorpayCheckout(
       key: gateway.keyId,
       amount: Math.round(gateway.amount * 100),
       currency: gateway.currency || "INR",
-      name: "Navbharat Gurukulam",
+      name: "Madinano",
       description: `Order ${gateway.orderNo}`,
       order_id: gateway.orderId,
       prefill: {
         name: gateway.studentName,
         email: gateway.studentEmail,
       },
-      theme: { color: "#7c1d1d" },
+      theme: { color: "#003B73" },
       handler: async (response: RazorpayHandlerResponse) => {
         try {
           await verifyPayment({

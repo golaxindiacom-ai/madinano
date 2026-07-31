@@ -1,5 +1,5 @@
 /**
- * Replace dummy students/courses with Navbharat Gurukulam–aligned real data.
+ * Replace dummy students/courses with Madinano–aligned real data.
  * Run: node scripts/migrate-real-data.mjs
  */
 import fs from "fs";
@@ -101,10 +101,10 @@ const STUDENT_KAVITA = {
 };
 
 const INSTRUCTOR_MAP = {
-  "John Smith": { name: "Dr. Rajesh Kumar", email: "rajesh.kumar@navbharatgurukulam.com", expertise: "Civil Services", title: "UPSC Mentor", slug: "dr-rajesh-kumar", city: "New Delhi", country: "India" },
-  "Sarah Johnson": { name: "Prof. Meera Iyer", email: "meera.iyer@navbharatgurukulam.com", expertise: "Research Methods", title: "Research Director", slug: "prof-meera-iyer", city: "Pune", country: "India" },
-  "Emma Wilson": { name: "Dr. Sana Rahman", email: "emma@navbharatgurukulam.com", expertise: "Education & Hindi", title: "Senior Faculty", slug: "dr-sana-rahman", city: "Lucknow", country: "India" },
-  "Michael Chen": { name: "Dr. Sana Rahman", email: "emma@navbharatgurukulam.com", expertise: "Education & Hindi", title: "Senior Faculty", slug: "dr-sana-rahman", city: "Lucknow", country: "India" },
+  "John Smith": { name: "Dr. Rajesh Kumar", email: "rajesh.kumar@madinano.com", expertise: "Civil Services", title: "UPSC Mentor", slug: "dr-rajesh-kumar", city: "New Delhi", country: "India" },
+  "Sarah Johnson": { name: "Prof. Meera Iyer", email: "meera.iyer@madinano.com", expertise: "Research Methods", title: "Research Director", slug: "prof-meera-iyer", city: "Pune", country: "India" },
+  "Emma Wilson": { name: "Dr. Sana Rahman", email: "emma@madinano.com", expertise: "Education & Hindi", title: "Senior Faculty", slug: "dr-sana-rahman", city: "Lucknow", country: "India" },
+  "Michael Chen": { name: "Dr. Sana Rahman", email: "emma@madinano.com", expertise: "Education & Hindi", title: "Senior Faculty", slug: "dr-sana-rahman", city: "Lucknow", country: "India" },
 };
 
 const OLD_STUDENT_IDS = new Set([
@@ -215,7 +215,7 @@ for (const u of db.users) {
     u.phone = STUDENT_KAVITA.phone;
     u.city = STUDENT_KAVITA.city;
   }
-  if (u.email === "emma@navbharatgurukulam.com") {
+  if (u.email === "emma@madinano.com") {
     u.name = "Dr. Sana Rahman";
     u.city = "Lucknow";
     u.country = "India";
@@ -373,11 +373,11 @@ for (const act of db.activities ?? []) {
 }
 
 for (const log of db.systemLogs ?? []) {
-  if (log.user === "john@navbharatgurukulam.com") log.user = "rajesh.kumar@navbharatgurukulam.com";
+  if (log.user === "john@madinano.com") log.user = "rajesh.kumar@madinano.com";
 }
 
 if (db.events?.[0]) {
-  db.events[0].title = "Navbharat Research & Education Summit 2026";
+  db.events[0].title = "Madinano Research & Education Summit 2026";
   db.events[0].attendees = 120;
 }
 

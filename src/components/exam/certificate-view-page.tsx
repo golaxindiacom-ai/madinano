@@ -38,7 +38,7 @@ export function CertificateViewPage({ certId }: { certId: string }) {
   if (!cert) return <div className="flex min-h-screen items-center justify-center">Loading certificate...</div>;
 
   const shareUrl = cert.verifyUrl || (typeof window !== "undefined" ? window.location.href : "");
-  const shareText = `I earned a certificate for "${cert.quizTitle}" from Navbharat Gurukulam! 🎓`;
+  const shareText = `I earned a certificate for "${cert.quizTitle}" from Madinano! 🎓`;
   const enc = encodeURIComponent;
   const shareLinks = [
     { label: "WhatsApp", href: `https://wa.me/?text=${enc(`${shareText} ${shareUrl}`)}`, color: "bg-[#25D366]" },

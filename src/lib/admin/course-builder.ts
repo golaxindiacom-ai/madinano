@@ -349,7 +349,7 @@ async function logCourseAction(action: string, courseId: string, title: string) 
   db.systemLogs.unshift({
     id: randomUUID(),
     action: `${action} course "${title}" (${courseId})`,
-    user: "admin@navbharatgurukulam.com",
+    user: "admin@madinano.com",
     module: "courses",
     ip: "127.0.0.1",
     level: "info",

@@ -258,10 +258,10 @@ export function StudentShell({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-4">
           <Link href="/" onClick={closeDrawer} className="flex min-w-0 items-center gap-2.5">
-            <img src={images.logo} alt="Navbharat Gurukulam" className="h-10 w-10 shrink-0 rounded-full object-cover" />
+            <img src={images.logo} alt="Madinano" className="h-10 w-10 shrink-0 rounded-full object-cover" />
             <div className="min-w-0 leading-tight">
               <p className="truncate text-sm font-extrabold text-ink">
-                Navbharat <span className="text-primary">Gurukulam</span>
+                Madinano <span className="text-primary">Global</span>
               </p>
               <p className="text-[10px] font-medium text-muted-foreground">Learn | Grow | Succeed</p>
             </div>
@@ -287,10 +287,10 @@ export function StudentShell({ children }: { children: React.ReactNode }) {
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-[260px] shrink-0 flex-col border-r border-border bg-card/60 backdrop-blur lg:flex">
         <Link href="/" className="flex items-center gap-2.5 border-b border-border px-6 py-5">
-          <img src={images.logo} alt="Navbharat Gurukulam" className="h-11 w-11 shrink-0 rounded-full object-cover" />
+          <img src={images.logo} alt="Madinano" className="h-11 w-11 shrink-0 rounded-full object-cover" />
           <span className="leading-tight">
             <span className="block text-[15px] font-extrabold tracking-tight text-ink">
-              Navbharat <span className="text-primary">Gurukulam</span>
+              Madinano <span className="text-primary">Global</span>
             </span>
             <span className="block text-[10px] font-medium text-muted-foreground">Learn | Grow | Succeed</span>
           </span>
@@ -319,7 +319,7 @@ export function StudentShell({ children }: { children: React.ReactNode }) {
 
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-bold text-ink sm:text-base">{pageTitle}</p>
-              <p className="truncate text-[11px] text-muted-foreground lg:hidden">Navbharat Gurukulam</p>
+              <p className="truncate text-[11px] text-muted-foreground lg:hidden">Madinano</p>
             </div>
 
             <div className="relative ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">

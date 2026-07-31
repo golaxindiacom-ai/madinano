@@ -1,8 +1,8 @@
 export const images = {
-  logo: "/images/ngrf-logo.png",
+  logo: "/images/madinano-logo.png",
   heroStudent: "/images/hero-student-new.jpg",
   heroBanner: "/images/hero-navbharat.png",
-  crest: "/images/crest-emblem.png",
+  crest: "/images/madinano-logo.png",
   courseWeb: "/images/course-webdev.jpg",
   courseData: "/images/course-datascience.jpg",
   courseDesign: "/images/course-design.jpg",

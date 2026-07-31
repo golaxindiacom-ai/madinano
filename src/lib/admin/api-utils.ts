@@ -106,7 +106,7 @@ async function logAction(action: string, module: string, targetId: string) {
   db.systemLogs.unshift({
     id: randomUUID(),
     action: `${action} ${module} (${targetId})`,
-    user: "admin@navbharatgurukulam.com",
+    user: "admin@madinano.com",
     module,
     ip: "127.0.0.1",
     level: "info",

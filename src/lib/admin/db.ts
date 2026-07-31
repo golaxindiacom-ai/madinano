@@ -220,5 +220,5 @@ export async function importDb(data: AdminDatabase): Promise<AdminDatabase> {
 }
 
 export function getDbPath() {
-  return process.env.DATABASE_URL ?? "postgresql://localhost:5432/navbharat";
+  return process.env.DATABASE_URL ?? "postgresql://localhost:5432/madinano";
 }

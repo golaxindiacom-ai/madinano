@@ -184,9 +184,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-4">
           <div className="flex min-w-0 items-center gap-2.5">
-            <img src={images.logo} alt="Navbharat Gurukulam" className="h-10 w-10 shrink-0 rounded-full object-cover" />
+            <img src={images.logo} alt="Madinano" className="h-10 w-10 shrink-0 rounded-full object-cover" />
             <div className="min-w-0 leading-tight">
-              <p className="truncate text-sm font-extrabold text-ink">Navbharat Gurukulam</p>
+              <p className="truncate text-sm font-extrabold text-ink">Madinano</p>
               <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                 LMS Admin Panel
               </p>
@@ -212,9 +212,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       {/* Desktop sidebar (lg+) */}
       <aside className="hidden w-[260px] shrink-0 flex-col border-r border-border bg-card lg:flex">
         <div className="flex items-center gap-2.5 px-5 py-5">
-          <img src={images.logo} alt="Navbharat Gurukulam" className="h-10 w-10 shrink-0 rounded-full object-cover" />
+          <img src={images.logo} alt="Madinano" className="h-10 w-10 shrink-0 rounded-full object-cover" />
           <div className="min-w-0 leading-tight">
-            <p className="truncate text-sm font-extrabold text-ink">Navbharat Gurukulam</p>
+            <p className="truncate text-sm font-extrabold text-ink">Madinano</p>
             <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
               LMS Admin Panel
             </p>
@@ -244,7 +244,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
             <div className="min-w-0 flex-1 lg:hidden">
               <p className="truncate text-sm font-bold text-ink">Admin Panel</p>
-              <p className="truncate text-[11px] text-muted-foreground">Navbharat Gurukulam</p>
+              <p className="truncate text-[11px] text-muted-foreground">Madinano</p>
             </div>
 
             <div className="hidden min-w-0 flex-1 items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 md:flex md:max-w-md">

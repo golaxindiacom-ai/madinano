@@ -170,12 +170,12 @@ export default function InstructorDashboardPage() {
           <Link href="/" className="flex items-center gap-2.5 border-b border-border px-6 py-5">
             <img
               src={images.logo}
-              alt="Navbharat Gurukulam"
+              alt="Madinano"
               className="h-11 w-11 shrink-0 rounded-full object-cover"
             />
             <span className="leading-tight">
               <span className="block text-[15px] font-extrabold text-ink">
-                Navbharat <span className="text-primary">Gurukulam</span>
+                Madinano <span className="text-primary">Global</span>
               </span>
               <span className="block text-[10px] text-muted-foreground">Instructor Portal</span>
             </span>

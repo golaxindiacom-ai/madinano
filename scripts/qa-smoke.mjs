@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Full feature smoke test for Navbharat Gurukulam
+ * Full feature smoke test for Madinano
  */
 const BASE = process.env.BASE_URL || "http://127.0.0.1:3210";
 const results = [];
@@ -62,7 +62,7 @@ async function login(email, password) {
 }
 
 async function main() {
-  console.log(`\n=== Navbharat QA @ ${BASE} ===\n`);
+  console.log(`\n=== Madinano QA @ ${BASE} ===\n`);
 
   // 1. Public pages
   console.log("----- PUBLIC PAGES -----");
@@ -191,10 +191,10 @@ async function main() {
   });
   check("duplicate signup rejected", dup.data?.success !== true);
 
-  const admin = await login("admin@navbharatgurukulam.com", "password123");
+  const admin = await login("admin@madinano.com", "password123");
   check("admin login", admin.data?.success === true);
 
-  const instructor = await login("emma@navbharatgurukulam.com", "password123");
+  const instructor = await login("emma@madinano.com", "password123");
   check("instructor login", instructor.data?.success === true);
 
   // 6. Student features

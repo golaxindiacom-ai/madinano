@@ -67,9 +67,9 @@ export function SiteTopBar() {
           </a>
           <a
             className="inline-flex items-center gap-2 hover:text-white"
-            href="mailto:support@navbharatgurukulam.com"
+            href="mailto:support@madinano.com"
           >
-            <Mail className="h-3.5 w-3.5" /> support@navbharatgurukulam.com
+            <Mail className="h-3.5 w-3.5" /> support@madinano.com
           </a>
           <div className="flex items-center gap-3 text-white/70">
             {[Facebook, Twitter, Instagram, Youtube].map((Ic, i) => (
@@ -143,15 +143,15 @@ export function SiteHeader() {
             <Link href="/" className="flex min-w-0 shrink items-center gap-2 sm:gap-2.5 md:gap-3">
               <img
                 src={images.logo}
-                alt="Navbharat Gurukulam Research Foundation"
+                alt="Madinano Global Pvt. Ltd."
                 className="h-9 w-9 shrink-0 rounded-full object-cover sm:h-11 sm:w-11 md:h-12 md:w-12"
               />
               <span className="min-w-0 leading-tight">
                 <span className="block truncate text-sm font-extrabold tracking-tight text-ink sm:text-[15px] md:text-base">
-                  Navbharat Gurukulam
+                  Madinano
                 </span>
                 <span className="hidden text-[9px] font-bold uppercase tracking-[0.2em] text-primary sm:block">
-                  Research Foundation
+                  Global Pvt. Ltd.
                 </span>
               </span>
             </Link>
@@ -258,13 +258,13 @@ export function SiteHeader() {
           <Link href="/" className="flex min-w-0 items-center gap-2.5" onClick={closeDrawer}>
             <img
               src={images.logo}
-              alt="Navbharat Gurukulam"
+              alt="Madinano"
               className="h-10 w-10 shrink-0 rounded-full object-cover"
             />
             <div className="min-w-0 leading-tight">
-              <p className="truncate text-sm font-extrabold text-ink">Navbharat Gurukulam</p>
+              <p className="truncate text-sm font-extrabold text-ink">Madinano</p>
               <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-primary">
-                Research Foundation
+                Global Pvt. Ltd.
               </p>
             </div>
           </Link>
@@ -371,9 +371,9 @@ export function SiteHeader() {
             </a>
             <a
               className="flex items-center gap-2 hover:text-primary"
-              href="mailto:support@navbharatgurukulam.com"
+              href="mailto:support@madinano.com"
             >
-              <Mail className="h-3.5 w-3.5 shrink-0" /> support@navbharatgurukulam.com
+              <Mail className="h-3.5 w-3.5 shrink-0" /> support@madinano.com
             </a>
           </div>
         </div>

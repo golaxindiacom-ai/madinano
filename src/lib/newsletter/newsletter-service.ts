@@ -46,8 +46,8 @@ export async function subscribeNewsletter(email: string) {
 
   await queueEmail({
     to: email.trim(),
-    subject: "You're subscribed to Navbharat Gurukulam updates",
-    body: `Thanks for subscribing!\n\nYou'll receive course updates, research notes, and offers from Navbharat Gurukulam.\n\nIf this wasn't you, ignore this message.`,
+    subject: "You're subscribed to Madinano updates",
+    body: `Thanks for subscribing!\n\nYou'll receive course updates, research notes, and offers from Madinano.\n\nIf this wasn't you, ignore this message.`,
     relatedType: "newsletter",
   });
 

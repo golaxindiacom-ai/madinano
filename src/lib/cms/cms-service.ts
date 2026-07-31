@@ -58,7 +58,7 @@ export async function ensureCmsPagesHaveContent() {
     "about",
     "About Us",
     [
-      "Navbharat Gurukulam is a next-generation online learning platform dedicated to helping students, professionals, and organizations unlock their true potential.",
+      "Madinano is a next-generation online learning platform dedicated to helping students, professionals, and organizations unlock their true potential.",
       "",
       "Our mission is to empower individuals through accessible, affordable, and high-quality education that helps them build skills, advance their careers, and create a better future.",
       "",
@@ -93,7 +93,7 @@ export async function ensureCmsPagesHaveContent() {
       "",
       "Last updated: July 2026",
     ].join("\n"),
-    "How Navbharat Gurukulam collects, uses, and protects your information.",
+    "How Madinano collects, uses, and protects your information.",
   );
 
   ensure(
@@ -114,7 +114,7 @@ export async function ensureCmsPagesHaveContent() {
       "",
       "Last updated: July 2026",
     ].join("\n"),
-    "Rules for using Navbharat Gurukulam courses, exams, and platform services.",
+    "Rules for using Madinano courses, exams, and platform services.",
   );
 
   if (dirty) await writeDb(db);

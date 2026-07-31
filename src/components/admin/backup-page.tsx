@@ -17,7 +17,7 @@ export function AdminBackupPage() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `navbharat-backup-${Date.now()}.json`;
+      a.download = `madinano-backup-${Date.now()}.json`;
       a.click();
       URL.revokeObjectURL(url);
       setMessage("Backup downloaded successfully");

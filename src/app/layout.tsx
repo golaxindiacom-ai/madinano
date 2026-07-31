@@ -16,13 +16,13 @@ const poppins = Poppins({
   display: "swap",
 });
 
-const siteName = "Navbharat Gurukulam";
+const siteName = "Madinano";
 const defaultTitle = `${siteName} — Premium Learning Management Platform`;
 const defaultDescription =
-  "Navbharat Gurukulam is the world-class learning platform for ambitious learners. Live classes, expert mentors, and industry-recognised certificates.";
+  "Madinano Global Pvt. Ltd. is the world-class learning platform for ambitious learners. Live classes, expert mentors, and industry-recognised certificates.";
 const ogDescription =
   "Live classes, expert mentors, and industry-recognised certificates. Learn today, lead tomorrow.";
-const ogImage = "/images/hero-navbharat.png";
+const ogImage = "/images/madinano-logo.png";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   authors: [{ name: siteName }],
   applicationName: siteName,
   icons: {
-    icon: [{ url: "/images/ngrf-logo.png", type: "image/png" }],
-    apple: [{ url: "/images/ngrf-logo.png", type: "image/png" }],
+    icon: [{ url: "/images/madinano-logo.png", type: "image/png" }],
+    apple: [{ url: "/images/madinano-logo.png", type: "image/png" }],
   },
   openGraph: {
     title: defaultTitle,

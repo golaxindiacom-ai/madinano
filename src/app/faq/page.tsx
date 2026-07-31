@@ -32,7 +32,7 @@ export default function FaqPage() {
             Frequently Asked <span className="text-primary">Questions</span>
           </>
         }
-        subtitle="Quick answers about courses, payments, certificates, and learning on Navbharat Gurukulam."
+        subtitle="Quick answers about courses, payments, certificates, and learning on Madinano."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "FAQs" }]}
       />
       <PageBand tone="faq">

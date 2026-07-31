@@ -7,7 +7,7 @@ import type { EmailOutboxItem } from "@/lib/admin/types";
  */
 export async function deliverEmail(item: EmailOutboxItem) {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM || "Navbharat Gurukulam <onboarding@resend.dev>";
+  const from = process.env.RESEND_FROM || "Madinano <onboarding@resend.dev>";
 
   if (!apiKey) {
     console.info(

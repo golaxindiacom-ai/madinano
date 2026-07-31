@@ -520,7 +520,7 @@ export async function submitContact(input: {
   });
   await writeDb(db);
 
-  const siteEmail = db.settings?.siteEmail || "support@navbharatgurukulam.com";
+  const siteEmail = db.settings?.siteEmail || "support@madinano.com";
   await queueEmail({
     to: siteEmail,
     subject: `[Contact] ${subject}`,
@@ -529,8 +529,8 @@ export async function submitContact(input: {
   });
   await queueEmail({
     to: email,
-    subject: "We received your message — Navbharat Gurukulam",
-    body: `Hi ${name},\n\nThanks for contacting Navbharat Gurukulam. We received your message and will reply soon.\n\nYour message:\n${message}\n\n— Navbharat Gurukulam Support`,
+    subject: "We received your message — Madinano",
+    body: `Hi ${name},\n\nThanks for contacting Madinano. We received your message and will reply soon.\n\nYour message:\n${message}\n\n— Madinano Support`,
     relatedType: "contact-ack",
   });
 

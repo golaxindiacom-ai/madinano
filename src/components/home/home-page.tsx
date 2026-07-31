@@ -238,7 +238,7 @@ const Hero = ({
     <div className="absolute inset-0 bg-[oklch(0.97_0.02_60)]">
       <img
         src={images.heroBanner}
-        alt="Student at Navbharat Gurukulam"
+        alt="Student at Madinano"
         className="absolute inset-0 h-full w-full object-cover object-[75%_center] sm:object-[70%_center] md:object-center"
       />
       {/* strengthen the cream on the left so the headline stays readable */}
@@ -250,8 +250,8 @@ const Hero = ({
     <div className="absolute right-3 top-4 z-20 sm:right-6 sm:top-6 md:right-8 md:top-8">
       <img
         src={images.logo}
-        alt="Navbharat Gurukulam crest"
-        className="h-14 w-14 rounded-full object-cover drop-shadow-lg sm:h-16 sm:w-16 md:h-20 md:w-20 lg:h-24 lg:w-24"
+        alt="Madinano logo"
+        className="h-14 w-14 object-contain drop-shadow-lg sm:h-16 sm:w-16 md:h-20 md:w-20 lg:h-24 lg:w-24"
       />
     </div>
 
@@ -440,7 +440,7 @@ const features = [
 const WhyUs = () => (
   <section className="bg-home-why py-12 md:py-16 lg:py-20">
     <Container>
-      <SectionTitle title="Why NavBharat Gurukulam?" subtitle="Excellence in education and research since inception." />
+      <SectionTitle title="Why Madinano?" subtitle="Excellence in education and research since inception." />
       <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
         {features.map(({ i: Icon, t, d, fg }) => (
           <div key={t} className="rounded-lg border border-border bg-card p-6 transition hover:shadow-card">

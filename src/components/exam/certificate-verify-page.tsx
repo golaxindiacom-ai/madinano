@@ -46,7 +46,7 @@ export function CertificateVerifyPage({ certNo }: { certNo: string }) {
             Certificate <span className="text-primary">Verification</span>
           </>
         }
-        subtitle="Verify authenticity of Navbharat Gurukulam certificates"
+        subtitle="Verify authenticity of Madinano certificates"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Verify Certificate" }]}
       />
       <PageBand tone="faq">

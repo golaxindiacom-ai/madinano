@@ -44,51 +44,51 @@
 :root {
   --radius: 0.625rem;
 
-  /* Academic theme — maroon primary + gold accent (matches reference) */
-  --background: oklch(0.995 0.002 60);
-  --surface: oklch(0.975 0.006 40);
-  --lavender: oklch(0.97 0.012 30);
+  /* Madinano brand — navy primary + teal accent + gold highlights */
+  --background: oklch(0.995 0.004 250);
+  --surface: oklch(0.975 0.008 240);
+  --lavender: oklch(0.97 0.012 230);
 
-  --foreground: oklch(0.30 0.015 40);
-  --ink: oklch(0.20 0.02 30);
+  --foreground: oklch(0.30 0.025 250);
+  --ink: oklch(0.22 0.04 250);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.30 0.015 40);
+  --card-foreground: oklch(0.30 0.025 250);
 
-  /* Maroon — primary CTAs, links, icons, accents */
-  --primary: oklch(0.42 0.135 18);
+  /* Navy blue — primary brand, links, icons */
+  --primary: oklch(0.35 0.08 250);
   --primary-foreground: oklch(0.99 0 0);
 
-  /* Maroon alias — register, enroll */
-  --maroon: oklch(0.42 0.135 18);
+  /* Teal — CTAs, active states, secondary accent (maroon alias kept for class compat) */
+  --maroon: oklch(0.58 0.11 195);
   --maroon-foreground: oklch(0.99 0 0);
 
-  /* Deep maroon — footer / dark bands */
-  --forest: oklch(0.33 0.11 18);
+  /* Deep navy — footer / dark bands */
+  --forest: oklch(0.28 0.06 250);
   --forest-foreground: oklch(0.99 0 0);
 
-  /* Gold / amber — prices, subscribe, highlights */
-  --gold: oklch(0.66 0.13 72);
-  --gold-foreground: oklch(1 0 0);
+  /* Gold — prices, subscribe, highlights */
+  --gold: oklch(0.72 0.12 85);
+  --gold-foreground: oklch(0.20 0.04 85);
 
-  --secondary: oklch(0.96 0.012 40);
-  --secondary-foreground: oklch(0.30 0.015 40);
+  --secondary: oklch(0.96 0.012 240);
+  --secondary-foreground: oklch(0.30 0.025 250);
 
-  --muted: oklch(0.96 0.006 60);
-  --muted-foreground: oklch(0.48 0.015 40);
+  --muted: oklch(0.96 0.006 250);
+  --muted-foreground: oklch(0.48 0.02 250);
 
-  --accent: oklch(0.95 0.03 25);
-  --accent-foreground: oklch(0.42 0.135 18);
+  --accent: oklch(0.94 0.03 195);
+  --accent-foreground: oklch(0.35 0.08 250);
 
-  --border: oklch(0.90 0.008 60);
-  --input: oklch(0.94 0.006 60);
-  --ring: oklch(0.42 0.135 18);
+  --border: oklch(0.90 0.008 250);
+  --input: oklch(0.94 0.006 250);
+  --ring: oklch(0.58 0.11 195);
 
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --shadow-card: 0 1px 3px oklch(0.2 0.02 30 / 0.06), 0 8px 24px oklch(0.2 0.02 30 / 0.08);
-  --shadow-float: 0 16px 40px -8px oklch(0.2 0.04 30 / 0.14);
+  --shadow-card: 0 1px 3px oklch(0.2 0.04 250 / 0.06), 0 8px 24px oklch(0.2 0.04 250 / 0.08);
+  --shadow-float: 0 16px 40px -8px oklch(0.2 0.06 250 / 0.14);
 }
 
 @layer base {
@@ -113,7 +113,7 @@
     max-width: 100%;
   }
   ::selection {
-    background: oklch(0.42 0.135 18 / 0.2);
+    background: oklch(0.58 0.11 195 / 0.25);
     color: var(--ink);
   }
 }
@@ -125,21 +125,21 @@
   box-shadow: var(--shadow-float);
 }
 @utility shadow-glow {
-  box-shadow: 0 0 0 1px oklch(0.42 0.135 18 / 0.25), 0 16px 48px -8px oklch(0.42 0.135 18 / 0.2);
+  box-shadow: 0 0 0 1px oklch(0.58 0.11 195 / 0.25), 0 16px 48px -8px oklch(0.35 0.08 250 / 0.2);
 }
 
 @utility bg-hero-soft {
   background:
-    linear-gradient(105deg, oklch(0.99 0.01 95 / 0.95) 0%, oklch(0.97 0.02 60 / 0.85) 45%, oklch(0.95 0.03 75 / 0.35) 100%),
-    linear-gradient(135deg, oklch(0.42 0.135 18 / 0.07) 0%, transparent 45%, oklch(0.35 0.08 145 / 0.1) 100%),
-    oklch(0.97 0.02 60);
+    linear-gradient(105deg, oklch(0.99 0.01 250 / 0.95) 0%, oklch(0.97 0.02 240 / 0.85) 45%, oklch(0.95 0.03 195 / 0.35) 100%),
+    linear-gradient(135deg, oklch(0.35 0.08 250 / 0.07) 0%, transparent 45%, oklch(0.58 0.11 195 / 0.1) 100%),
+    oklch(0.97 0.02 240);
 }
 
 @utility bg-hero-research {
   background:
-    linear-gradient(105deg, oklch(0.99 0.01 95 / 0.94) 0%, oklch(0.97 0.02 60 / 0.82) 42%, oklch(0.95 0.03 75 / 0.4) 72%, oklch(0.92 0.02 85 / 0.2) 100%),
-    linear-gradient(135deg, oklch(0.42 0.135 18 / 0.08) 0%, oklch(0.55 0.12 75 / 0.06) 50%, oklch(0.35 0.08 145 / 0.12) 100%),
-    linear-gradient(180deg, oklch(0.97 0.02 60) 0%, oklch(0.94 0.025 80) 100%);
+    linear-gradient(105deg, oklch(0.99 0.01 250 / 0.94) 0%, oklch(0.97 0.02 240 / 0.82) 42%, oklch(0.95 0.03 195 / 0.4) 72%, oklch(0.92 0.02 230 / 0.2) 100%),
+    linear-gradient(135deg, oklch(0.35 0.08 250 / 0.08) 0%, oklch(0.72 0.12 85 / 0.06) 50%, oklch(0.58 0.11 195 / 0.12) 100%),
+    linear-gradient(180deg, oklch(0.97 0.02 240) 0%, oklch(0.94 0.025 250) 100%);
 }
 
 @utility text-gradient-green {
@@ -172,15 +172,15 @@
 }
 
 @utility bg-section-paper {
-  background-color: oklch(0.995 0.002 60);
+  background-color: oklch(0.995 0.004 250);
 }
 
 @utility bg-section-cream {
-  background-color: oklch(0.975 0.012 75);
+  background-color: oklch(0.975 0.012 240);
 }
 
 @utility bg-section-blush {
-  background-color: oklch(0.97 0.018 25);
+  background-color: oklch(0.97 0.018 195);
 }
 
 @utility bg-section-sand {
@@ -188,31 +188,31 @@
 }
 
 @utility bg-section-mist {
-  background-color: oklch(0.965 0.01 145);
+  background-color: oklch(0.965 0.012 230);
 }
 
 @utility bg-section-rose {
   background:
-    linear-gradient(180deg, oklch(0.96 0.025 20) 0%, oklch(0.98 0.012 30) 100%);
+    linear-gradient(180deg, oklch(0.96 0.025 195) 0%, oklch(0.98 0.012 240) 100%);
 }
 
 @utility bg-section-gold {
   background:
-    linear-gradient(180deg, oklch(0.97 0.03 80) 0%, oklch(0.985 0.015 70) 100%);
+    linear-gradient(180deg, oklch(0.97 0.03 85) 0%, oklch(0.985 0.015 80) 100%);
 }
 
-/* Home page section bands — plain CSS so backgrounds always apply */
-.bg-home-trusted { background-color: #f3e8d8 !important; }
+/* Home page section bands — navy/teal brand tints */
+.bg-home-trusted { background-color: #e8f0f8 !important; }
 .bg-home-courses { background-color: #ffffff !important; }
-.bg-home-why { background-color: #f8e9ea !important; }
-.bg-home-categories { background-color: #f5efd8 !important; }
-.bg-home-process { background-color: #e8f2ea !important; }
-.bg-home-live { background-color: #f6e6ef !important; }
-.bg-home-instructors { background-color: #efe8e1 !important; }
+.bg-home-why { background-color: #e6f4f4 !important; }
+.bg-home-categories { background-color: #eef5f8 !important; }
+.bg-home-process { background-color: #e4f0f5 !important; }
+.bg-home-live { background-color: #e8f2f8 !important; }
+.bg-home-instructors { background-color: #edf2f7 !important; }
 .bg-home-testimonials { background-color: #e6f0f4 !important; }
-.bg-home-app { background-color: #eceaf5 !important; }
-.bg-home-blog { background-color: #f7ecd0 !important; }
-.bg-home-faq { background-color: #e7f1e8 !important; }
+.bg-home-app { background-color: #eceff5 !important; }
+.bg-home-blog { background-color: #f5f0e6 !important; }
+.bg-home-faq { background-color: #e4f2f0 !important; }
 
 @keyframes marquee {
   from { transform: translateX(0); }

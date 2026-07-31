@@ -71,16 +71,16 @@ export function createSeedDatabase(): AdminDatabase {
 
   return {
     settings: {
-      siteName: "Navbharat Gurukulam",
-      siteEmail: "support@navbharatgurukulam.com",
+      siteName: "Madinano",
+      siteEmail: "support@madinano.com",
       sitePhone: "+91 12345 67890",
       currency: "INR",
       timezone: "Asia/Kolkata",
       maintenanceMode: false,
       allowRegistration: true,
       certificate: {
-        organizationName: "Navbharat Gurukulam",
-        organizationSubtitle: "Research Foundation",
+        organizationName: "Madinano",
+        organizationSubtitle: "Global Pvt. Ltd.",
         director: { name: "Dr. A. K. Sharma", title: "Director", signatureImage: "" },
         registrar: { name: "R. Mehta", title: "Registrar", signatureImage: "" },
       },
@@ -109,7 +109,7 @@ export function createSeedDatabase(): AdminDatabase {
       {
         id: inst1,
         name: "Dr. Rajesh Kumar",
-        email: "rajesh.kumar@navbharatgurukulam.com",
+        email: "rajesh.kumar@madinano.com",
         expertise: "Civil Services",
         title: "UPSC Mentor",
         slug: "dr-rajesh-kumar",
@@ -127,7 +127,7 @@ export function createSeedDatabase(): AdminDatabase {
       {
         id: inst2,
         name: "Prof. Meera Iyer",
-        email: "meera.iyer@navbharatgurukulam.com",
+        email: "meera.iyer@madinano.com",
         expertise: "Research Methods",
         title: "Research Director",
         slug: "prof-meera-iyer",
@@ -145,7 +145,7 @@ export function createSeedDatabase(): AdminDatabase {
       {
         id: inst3,
         name: "Dr. Sana Rahman",
-        email: "emma@navbharatgurukulam.com",
+        email: "emma@madinano.com",
         expertise: "Education & Hindi",
         title: "Senior Faculty",
         slug: "dr-sana-rahman",
@@ -165,8 +165,8 @@ export function createSeedDatabase(): AdminDatabase {
     users: [
       { id: userArjun, name: "Arjun Mehta", email: "arjun.mehta@email.com", role: "student", status: "active", phone: "+91 98102 34567", country: "India", city: "New Delhi", passwordHash: demoPasswordHash, createdAt: daysAgo(2), updatedAt: now() },
       { id: userKavita, name: "Kavita Singh", email: "kavita.singh@email.com", role: "student", status: "active", phone: "+91 98290 11223", country: "India", city: "Jaipur", passwordHash: demoPasswordHash, createdAt: daysAgo(5), updatedAt: now() },
-      { id: userAdmin, name: "Admin User", email: "admin@navbharatgurukulam.com", role: "admin", status: "active", country: "India", city: "Delhi", passwordHash: demoPasswordHash, createdAt: daysAgo(365), updatedAt: now() },
-      { id: userEmma, name: "Dr. Sana Rahman", email: "emma@navbharatgurukulam.com", role: "instructor", status: "active", country: "India", city: "Lucknow", instructorId: inst3, passwordHash: demoPasswordHash, createdAt: daysAgo(30), updatedAt: now() },
+      { id: userAdmin, name: "Admin User", email: "admin@madinano.com", role: "admin", status: "active", country: "India", city: "Delhi", passwordHash: demoPasswordHash, createdAt: daysAgo(365), updatedAt: now() },
+      { id: userEmma, name: "Dr. Sana Rahman", email: "emma@madinano.com", role: "instructor", status: "active", country: "India", city: "Lucknow", instructorId: inst3, passwordHash: demoPasswordHash, createdAt: daysAgo(30), updatedAt: now() },
     ],
     enrollments: [
       { id: id(), userId: userArjun, courseId: course1, courseTitle: "UPSC Civil Services Foundation", progress: 65, status: "active", enrolledAt: daysAgo(10), createdAt: daysAgo(10), updatedAt: now() },
@@ -811,7 +811,7 @@ export function createSeedDatabase(): AdminDatabase {
       },
     ],
     events: [
-      { id: id(), title: "Navbharat Research & Education Summit 2026", date: daysAgo(-30), location: "New Delhi, India", attendees: 120, status: "upcoming", createdAt: daysAgo(20), updatedAt: now() },
+      { id: id(), title: "Madinano Research & Education Summit 2026", date: daysAgo(-30), location: "New Delhi, India", attendees: 120, status: "upcoming", createdAt: daysAgo(20), updatedAt: now() },
     ],
     testimonials: [
       {
@@ -858,8 +858,8 @@ export function createSeedDatabase(): AdminDatabase {
         slug: "about",
         status: "published",
         excerpt: "Empowering learners worldwide through research-led education.",
-        seoTitle: "About Us | Navbharat Gurukulam",
-        content: "Navbharat Gurukulam is a next-generation online learning platform dedicated to helping students, professionals, and organizations unlock their true potential.\n\nOur mission is to empower individuals through accessible, affordable, and high-quality education.\n\nWhy choose us:\n- Expert instructors\n- Flexible learning\n- Practical high-quality content\n- Affordable education\n- Lifetime access\n- Global community",
+        seoTitle: "About Us | Madinano",
+        content: "Madinano is a next-generation online learning platform dedicated to helping students, professionals, and organizations unlock their true potential.\n\nOur mission is to empower individuals through accessible, affordable, and high-quality education.\n\nWhy choose us:\n- Expert instructors\n- Flexible learning\n- Practical high-quality content\n- Affordable education\n- Lifetime access\n- Global community",
         createdAt: daysAgo(100),
         updatedAt: now(),
       },
@@ -885,7 +885,7 @@ export function createSeedDatabase(): AdminDatabase {
       },
     ],
     faq: [
-      { id: id(), question: "Is Navbharat Gurukulam beginner friendly?", answer: "Yes — every track starts from zero with step-by-step lessons and mentor support.", category: "General", status: "published", order: 1, createdAt: daysAgo(50), updatedAt: now() },
+      { id: id(), question: "Is Madinano beginner friendly?", answer: "Yes — every track starts from zero with step-by-step lessons and mentor support.", category: "General", status: "published", order: 1, createdAt: daysAgo(50), updatedAt: now() },
       { id: id(), question: "Do I get a certificate?", answer: "Yes. Every graduate who passes the final exam receives a verifiable digital certificate.", category: "General", status: "published", order: 2, createdAt: daysAgo(50), updatedAt: now() },
       { id: id(), question: "Can I learn at my own pace?", answer: "Absolutely. Recorded courses are self-paced, and live classes are optional for hybrid tracks.", category: "Learning", status: "published", order: 3, createdAt: daysAgo(50), updatedAt: now() },
       { id: id(), question: "What if I fall behind in a cohort?", answer: "All live sessions are recorded and every cohort has a self-paced companion track.", category: "Learning", status: "published", order: 4, createdAt: daysAgo(50), updatedAt: now() },
@@ -897,8 +897,8 @@ export function createSeedDatabase(): AdminDatabase {
       { id: id(), name: "Student", permissions: ["courses:read", "profile:write"], userCount: 2, createdAt: daysAgo(365), updatedAt: now() },
     ],
     systemLogs: [
-      { id: id(), action: "User login", user: "admin@navbharatgurukulam.com", module: "auth", ip: "192.168.1.1", level: "info", createdAt: daysAgo(0), updatedAt: now() },
-      { id: id(), action: "Course published", user: "rajesh.kumar@navbharatgurukulam.com", module: "courses", ip: "192.168.1.2", level: "info", createdAt: daysAgo(1), updatedAt: now() },
+      { id: id(), action: "User login", user: "admin@madinano.com", module: "auth", ip: "192.168.1.1", level: "info", createdAt: daysAgo(0), updatedAt: now() },
+      { id: id(), action: "Course published", user: "rajesh.kumar@madinano.com", module: "courses", ip: "192.168.1.2", level: "info", createdAt: daysAgo(1), updatedAt: now() },
     ],
     activities: [
       { id: id(), message: "New student Arjun Mehta registered", type: "user", color: "bg-emerald-500", audience: "admin", readBy: [], createdAt: daysAgo(0), updatedAt: now() },

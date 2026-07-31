@@ -128,7 +128,7 @@ export default function LoginPage() {
             <p className="mt-4 rounded-xl bg-muted/50 px-3 py-2 text-center text-[11px] text-muted-foreground">
               Student: arjun.mehta@email.com / password123
               <br />
-              Admin: admin@navbharatgurukulam.com / password123
+              Admin: admin@madinano.com / password123
             </p>
           </div>
         </Container>

@@ -1,5 +1,5 @@
 export const SESSION_COOKIE = "nbg_session";
-const SESSION_SECRET = process.env.AUTH_SECRET || "navbharat-dev-secret-change-in-production";
+const SESSION_SECRET = process.env.AUTH_SECRET || "madinano-dev-secret-change-in-production";
 
 async function hmacHex(message: string) {
   const key = await crypto.subtle.importKey(
